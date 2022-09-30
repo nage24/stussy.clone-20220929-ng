@@ -5,8 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="/static/css/header.css">
+    <link rel="stylesheet" href="/static/css/account.css">
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     
 </head>
 <body>
@@ -33,35 +36,61 @@
             </div>
             <nav class="nav-invisible">
                 <div class="site-nav-mega">
-                    <a href="" class="site-nav-child-link">1</a>
-                    <a href="" class="site-nav-child-link">2</a>
-                    <a href="" class="site-nav-child-link">3</a>
-                    <a href="" class="site-nav-child-link">4</a>
-                    <a href="" class="site-nav-child-link">5</a>
-                    <a href="" class="site-nav-child-link">6</a>
-                    <a href="" class="site-nav-child-link">7</a>
-                    <a href="" class="site-nav-child-link">8</a>
-                    <a href="" class="site-nav-child-link">9</a>
-                    <a href="" class="site-nav-child-link">10</a>
-                    <a href="" class="site-nav-child-link">11</a>
-                    <a href="" class="site-nav-child-link">12</a>
-                    <a href="" class="site-nav-child-link">13</a>
+                    <a href="" class="site-nav-child-link">NEW</a>
+                    <a href="" class="site-nav-child-link">TEES</a>
+                    <a href="" class="site-nav-child-link">SWEATS</a>
+                    <a href="" class="site-nav-child-link">OVERDYED</a>
+                    <a href="" class="site-nav-child-link">OUTERWEAR</a>
+                    <a href="" class="site-nav-child-link">TOPS & SHIRTS</a>
+                    <a href="" class="site-nav-child-link">KNITS</a>
+                    <a href="" class="site-nav-child-link">BOTTOMS</a>
+                    <a href="" class="site-nav-child-link">DENIM</a>
+                    <a href="" class="site-nav-child-link">HEADWEAR</a>
+                    <a href="" class="site-nav-child-link">ACCESSORIES</a>
+                    <a href="" class="site-nav-child-link">ALL</a>
                 </div>
                 <div class="site-nav-mega">
-                    <a href="" class="site-nav-child-link">1</a>
-                    <a href="" class="site-nav-child-link">2</a>
-                    <a href="" class="site-nav-child-link">3</a>
-                    <a href="" class="site-nav-child-link">4</a>
+                    <a href="" class="site-nav-child-link">ACCOUNT</a>
+                    <a href="" class="site-nav-child-link">CONTACT</a>
+                    <a href="" class="site-nav-child-link">FEATURES</a>
+                    <a href="" class="site-nav-child-link">CHAPTERS</a>
                 </div>
             </nav>
             <script src="/static/js/header.js"></script>
         </header>
-        <main>
 
+
+        <main>
+            <div class="login">
+                <h1 class="login-title">ACCOUNT</h1>
+                <div class="login-container"></div>
+                    <section class="login-new">
+                        <h2 class="login-subheader">회원가입</h2>
+                        <p class="login-content">회원가입을 하시면, 주문 조회와 개인정보 관리 및 빠른 체크아웃 등 다양한 혜택을 누리실 수 있습니다.</p>
+                        <button type="button" class="black-button login-button">신규가입</button>
+                    </section>
+                    <section class="login-current">
+                        <h2 class="login-subheader">로그인</h2>
+                        <div>
+                            <input type="text" class="login-input" placeholder="이름" required>
+                            <input type="text" class="login-input" placeholder="성" required>
+                        </div>
+                        <form action="" method="post">
+                            <input type="email" class="login-form-input" name="username" placeholder="이메일" required>
+                            <input type="password" class="login-form-input" name="password" placeholder="비밀번호" required>
+                            <button type="button" class="black-button login-button">로그인</button>
+                            <a href="" class="login-show-recover">비밀번호를 잊으셨나요?</a>
+                        </form>
+                        
+                    </section>
+            </div>
         </main>
+
+
         <footer>
 
         </footer>
     </div>
+    <script src="/static/js/login.js"></script>
 </body>
 </html>

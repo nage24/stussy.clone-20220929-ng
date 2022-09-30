@@ -5,14 +5,28 @@
 
     font-family: 'Noto Sans KR', sans-serif;
     font-size: 11px;
+    letter-spacing: 1px;
 }
 
 body, html {
     margin: 0px;
-    height: 100%;
 }
 
-button {
+input {
+    margin-bottom: 15px;
+    border: 1px solid rgb(198, 198, 198);
+    padding: 10px;
+
+    width: 100%;
+}
+
+input.focus {
+    outline: none;
+    border: 1px solid black;
+}
+
+
+.site-header-button {
     margin-bottom: 10px;
     border: 1px solid black;
     padding: 15px 0px;
@@ -21,8 +35,62 @@ button {
     font-weight: 700;
     color: black;
     background-color: white;
+    animation: button-fadeout 1s;
+
+    animation: none; ;
 
     cursor: pointer;
+}
+
+button:active {
+    animation: button-fadein 1s;
+}
+
+.black-button {
+    color: white;
+    background-color: black;
+
+    animation: black-button-fadeout 1s;
+}
+
+.black-button:active {
+    animation: black-button-fadein 1s;
+}
+
+@keyframes button-fadein {
+    from {
+        background-color: white;
+    }
+    to {
+        background-color: black;
+    }
+}
+
+@keyframes button-fadeout {
+    from {
+        background-color: black;
+    }
+    to {
+        background-color: white;
+    }
+}
+
+@keyframes black-button-fadein {
+    from {
+        background-color: black;
+    }
+    to {
+        background-color: rgb(100,100,100);
+    }
+}
+
+@keyframes black-button-fadeout {
+    from {
+        background-color: rgb(100,100,100);
+    }
+    to {
+        background-color: black;
+    }
 }
 
 a {
