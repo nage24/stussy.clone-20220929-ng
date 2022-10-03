@@ -1,17 +1,19 @@
 package com.stussy.stussy.clone20220929ng.controller.api;
 
+import com.stussy.stussy.clone20220929ng.dto.RegisterReqDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RequestMapping("/api/account")
 @RestController
 public class AccountApi {
 
-    @GetMapping("/register")
-    public ResponseEntity<?> register() {
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody RegisterReqDto registerReqDto) {
 
+        log.info("{}", registerReqDto);
         return ResponseEntity.ok(null);
     }
 

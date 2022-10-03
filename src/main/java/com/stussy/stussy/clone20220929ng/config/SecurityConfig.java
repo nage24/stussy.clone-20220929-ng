@@ -13,15 +13,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.httpBasic().disable();
-        http.authorizeRequests()
-                .antMatchers("/test/**", "/index")
-                .authenticated()
-                .anyRequest()
-                .permitAll()
+        http.authorizeRequests() //모든 요청시에 실행을 해라
+                .antMatchers("/test/**", "/index") //해당 요청 주소들은
+                .authenticated() //인증이 필요하다.
+                .anyRequest() //antMatchers 외에 다른 모든 요청들은
+                .permitAll() //모두 접근 권한을 허용해라.
                 .and()
-                .formLogin()
-                .loginPage("/account/login")
+                .formLogin() //폼로그인 방식으로 인증을 해라
+                .loginPage("/account/login") //우리가 만든 로그인 페이지를 사용해라.
                 .defaultSuccessUrl("/index");
+
     }
 
 }
