@@ -12,16 +12,13 @@
 	<artifactId>stussy.clone-20220929-ng</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>stussy.clone-20220929-ng</name>
-	<description>stussyClone Project</description>
+	<description>StussyClone Project</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
+
+
 	<dependencies>
-		<dependency>
-			<groupId>com.stussy</groupId>
-			<artifactId>stussy.clone-20220929-ng</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -57,26 +54,17 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-security</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-		</dependency>
-
 
 	</dependencies>
-
-
 
 	<build>
 		<plugins>
