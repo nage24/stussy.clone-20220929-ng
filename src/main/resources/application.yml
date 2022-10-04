@@ -7,7 +7,7 @@ spring:
 
     datasource:
       driver-class-name: org.mariadb.jdbc.Driver
-      url: jdbc:mariadb://web-study.csk3x5z6pzq3.ap-northeast-2.rds.amazonaws.com:3306/stussy-20220929-nk
+      url: jdbc:mariadb://web-study.csk3x5z6pzq3.ap-northeast-2.rds.amazonaws.com:3306/stussy-20220929-nk?allowMultiQueries=true
       username: admin
       password: 1q2w3e4r
 
