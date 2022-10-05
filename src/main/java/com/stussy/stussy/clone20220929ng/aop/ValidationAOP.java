@@ -27,54 +27,87 @@ public class ValidationAOP {
     private void annotationValid() {}
 
     @Around("annotationValid()")
-    public Object around(ProceedingJoinPoint joinPoint) {
+    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
 
         Object[] args = joinPoint.getArgs();
-        BindingResult bindingResult = null;
+        BeanPropertyBindingResult bindingResult = null;
 
-        for(int i = 0; i < args.length; i++) {
-            log.info("{}", args[i]);
+        log.info("args 배열 0번째 >>> {}", args[0]);
+        log.info("args 배열 1번째 >>>{}", args[1]);
 
-            if (args[i].getClass() == BeanPropertyBindingResult.class) {
-
-                bindingResult = (BindingResult) args[i];
-            }
-
-            log.info("확인로그 잘 들어갔나요? > {}", bindingResult);
-
-            if(bindingResult == null) {
-                try {
-                    return joinPoint.proceed();
-                } catch (Throwable e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            if (bindingResult.hasErrors()) {
-
-                log.error("유효성 검사 오류 발생");
-                Map<String, String> errorMap = new HashMap<String, String>();
-
-                bindingResult.getFieldErrors().forEach(error -> {
-                    log.info("Error: 필드명({}), 메세지({})" + error.getField(), error.getDefaultMessage());
-                    if (!error.getCode().equals("NotBlank")) {
-                        errorMap.put(error.getField(), error.getDefaultMessage());
-                    }
-                });
-
-                bindingResult.getFieldErrors().forEach(error -> {
-                    log.info("Error: 필드명({}), 메세지({})" + error.getField(), error.getDefaultMessage());
-                    if (error.getCode().equals("NotBlank")) {
-                        errorMap.put(error.getField(), error.getDefaultMessage());
-                    }
-                });
-
-                return ResponseEntity.badRequest().body(new CMRespDto<>(-1, "유효성 검사 실패", errorMap));
+        for (Object arg : args) {
+            if (arg.getClass() == BeanPropertyBindingResult.class) {
+                bindingResult = (BeanPropertyBindingResult) arg;
+                break;
             }
         }
 
-        return ResponseEntity.ok(null);
+        if (bindingResult == null) {
+            return joinPoint.proceed();
+        }
+
+        if (bindingResult.hasErrors()) {
+            log.info("확인로그 잘 들어갔나요? > {}", bindingResult);
+            log.error("유효성 검사 오류 발생");
+
+            Map<String, String> errorMap = new HashMap<String, String>();
+
+            bindingResult.getFieldErrors().forEach(error -> {
+                log.info("Error: 필드명({}), 메세지({})" + error.getField(), error.getDefaultMessage());
+                errorMap.put(error.getField(), error.getDefaultMessage());
+            });
+
+            return ResponseEntity.badRequest().body(new CMRespDto<>(-1, "유효성 검사 실패", errorMap));
+        }
+        return joinPoint.proceed();
     }
-
-
 }
+
+
+
+
+
+
+//        for(int i = 0; i < args.length; i++) {
+//            log.info("{}", args[i]);
+//
+//            if (args[i].getClass() == BeanPropertyBindingResult.class) {
+//
+//                bindingResult = (BeanPropertyBindingResult) args[i];
+//            }
+//
+//            log.info("확인로그 잘 들어갔나요? > {}", bindingResult);
+//
+//            if(bindingResult == null) {
+//                try {
+//                    return joinPoint.proceed();
+//                } catch (Throwable e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//
+//            if (bindingResult.hasErrors()) {
+//
+//                log.error("유효성 검사 오류 발생");
+//                Map<String, String> errorMap = new HashMap<String, String>();
+//
+//                bindingResult.getFieldErrors().forEach(error -> {
+//                    log.info("Error: 필드명({}), 메세지({})" + error.getField(), error.getDefaultMessage());
+//                    if (!error.getCode().equals("NotBlank")) {
+//                        errorMap.put(error.getField(), error.getDefaultMessage());
+//                    }
+//                });
+//
+//                bindingResult.getFieldErrors().forEach(error -> {
+//                    log.info("Error: 필드명({}), 메세지({})" + error.getField(), error.getDefaultMessage());
+//                    if (error.getCode().equals("NotBlank")) {
+//                        errorMap.put(error.getField(), error.getDefaultMessage());
+//                    }
+//                });
+//
+//                return ResponseEntity.badRequest().body(new CMRespDto<>(-1, "유효성 검사 실패", errorMap));
+//            }
+//        }
+//
+//        return ResponseEntity.ok(null);
+//    }

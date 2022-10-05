@@ -66,10 +66,4 @@ public class AccountApi {
         return ResponseEntity.ok(null);
     }
 
-    public ResponseEntity<?> login() {
-
-
-        return ResponseEntity.ok(null);
-    }
-
 }
