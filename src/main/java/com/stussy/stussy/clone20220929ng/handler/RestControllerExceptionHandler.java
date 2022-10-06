@@ -15,7 +15,7 @@ public class RestControllerExceptionHandler {
     public ResponseEntity<?> validationErrorException(CustomValidationException e) {
         return ResponseEntity
                 .badRequest()
-                .body(new CMRespDto(-1, e.getMessage(), null));
+                .body(new CMRespDto<>(-1, e.getMessage(), e.getErrorMap()));
 
         // return ResponseEntity.badRequest().body(new CMRespDto<>(-1, "Validation Error!", null));
     }

@@ -43,10 +43,10 @@ public class RegisterReqDto {
 
     public User toUserEntity() {
         return User.builder()
-                .username(email.toString())
-                .email(email)
+                .username(email)
                 .password(new BCryptPasswordEncoder().encode(password)) // password 암호화
                 .name(firstName + lastName)
+                .email(email)
                 .role_id(1)         // 일반 유저 register
                 .build();
     }
