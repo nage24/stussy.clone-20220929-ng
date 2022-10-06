@@ -1,4 +1,4 @@
-package com.stussy.stussy.clone20220929ng.dto;
+package com.stussy.stussy.clone20220929ng.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

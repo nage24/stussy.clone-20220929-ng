@@ -1,5 +1,7 @@
 package com.stussy.stussy.clone20220929ng.config;
 
+import com.stussy.stussy.clone20220929ng.service.PrincipalDetailService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -20,7 +22,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll() //모두 접근 권한을 허용해라.
                 .and()
                 .formLogin() //폼로그인 방식으로 인증을 해라
-                .loginPage("/account/login") //우리가 만든 로그인 페이지를 사용해라.
+
+                .usernameParameter("email")
+
+                .loginPage("/account/login") //우리가 만든 로그인 페이지를 사용해라. // Page 를 띄우는 Get 요청
+
+                .loginProcessingUrl("/account/login") // 로그인 로직 (PrincipalDetailService) POST 요청 ; 스프링 시큐리티 자동 매핑
+                // .loginProcessingUrl("principalDetailService") @RequiredArgsConstructor + final
+                // .failureForwardUrl() // login failed
+                // .successForwardUrl() // login success 시 연결할 url
+                // .defaultSuccessUrl() //
+
+                //.failureHandler()
+
                 .defaultSuccessUrl("/index");
 
     }

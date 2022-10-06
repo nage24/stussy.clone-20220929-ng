@@ -1,6 +1,7 @@
 package com.stussy.stussy.clone20220929ng.repository;
 
-import com.stussy.stussy.clone20220929ng.dto.User;
+import com.stussy.stussy.clone20220929ng.domain.User;
+import com.stussy.stussy.clone20220929ng.dto.account.RegisterReqDto;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

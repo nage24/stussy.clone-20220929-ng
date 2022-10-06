@@ -5,7 +5,10 @@ import com.stussy.stussy.clone20220929ng.aop.annotation.ValidAspect;
 import com.stussy.stussy.clone20220929ng.dto.CMRespDto;
 import com.stussy.stussy.clone20220929ng.dto.account.RegisterReqDto;
 import com.stussy.stussy.clone20220929ng.dto.validation.ValidationSequence;
+import com.stussy.stussy.clone20220929ng.service.AccountService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StopWatch;
 import org.springframework.validation.BindingResult;
@@ -19,14 +22,18 @@ import java.util.Map;
 @Slf4j
 @RequestMapping("/api/account")
 @RestController
+@RequiredArgsConstructor
 public class AccountApi {
+
+    // @RequiredArgsConstructor , final -> DI
+    private final AccountService accountService;
 
     // @ 유효성검사를 어노테이션으로 처리 하여 AOP 구현하는 것임.
 
     @ValidAspect
     @LogAspect
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Validated(ValidationSequence.class) @RequestBody RegisterReqDto registerReqDto, BindingResult bindingResult) { // 이 DTO 를 가져올 때 Valid 체크를 하겠다. ..
+    public ResponseEntity<?> register(@Validated(ValidationSequence.class) @RequestBody RegisterReqDto registerReqDto, BindingResult bindingResult) throws Exception { // 이 DTO 를 가져올 때 Valid 체크를 하겠다. ..
         // @Valid 를 주면 BindingResult 객체가 같이 따라 들어옴.
         // JSON 으로 받으려면  @ RequestBody 가 항상 필요하다 !
         // 유효성 검사 -> @Validated(ValidationSequence.class) 의 순서대로 ... !
@@ -63,7 +70,14 @@ public class AccountApi {
 //        stopWatch.stop();
 //        log.info("메소드 실행시간 >>> {}", stopWatch.getTotalTimeSeconds());
 //
-        return ResponseEntity.ok(null);
+        // return ResponseEntity.status(HttpStatus.CREATED).body(null);
+
+
+        accountService.checkDuplicatedEmail(registerReqDto.getEmail());
+        accountService.register(registerReqDto); // 예외처리?
+
+
+        return ResponseEntity.ok().body(new CMRespDto(1, "Successfully registered", registerReqDto));
     }
 
 }

@@ -103,3 +103,9 @@ a:hover {
     font-weight: 700;
     text-decoration: underline;
 }
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}

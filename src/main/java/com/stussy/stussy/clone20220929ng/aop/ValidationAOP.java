@@ -2,12 +2,11 @@ package com.stussy.stussy.clone20220929ng.aop;
 
 import com.stussy.stussy.clone20220929ng.dto.CMRespDto;
 import com.stussy.stussy.clone20220929ng.dto.account.RegisterReqDto;
+import com.stussy.stussy.clone20220929ng.exception.CustomValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.CodeSignature;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -26,8 +25,10 @@ public class ValidationAOP {
     @Pointcut("@annotation(com.stussy.stussy.clone20220929ng.aop.annotation.ValidAspect)")
     private void annotationValid() {}
 
-    @Around("annotationValid()")
-    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+   // @Around("annotationValid()")
+    @Before("annotationValid()") // Around / Before ; ProceedingJoinPoint 를 가지고 오고, 일반 JoinPoint 도 있음. -> 전후처리가 없음. 무조건 메소드 실행전에 실행 -> Proceed 가 없다.
+    public void before(JoinPoint joinPoint) throws Throwable {
+    // public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
 
         Object[] args = joinPoint.getArgs();
         BeanPropertyBindingResult bindingResult = null;
@@ -43,7 +44,7 @@ public class ValidationAOP {
         }
 
         if (bindingResult == null) {
-            return joinPoint.proceed();
+            // return joinPoint.proceed();
         }
 
         if (bindingResult.hasErrors()) {
@@ -57,10 +58,19 @@ public class ValidationAOP {
                 errorMap.put(error.getField(), error.getDefaultMessage());
             });
 
-            return ResponseEntity.badRequest().body(new CMRespDto<>(-1, "유효성 검사 실패", errorMap));
+            // throw new CustomValidationException("Validation failed", errorMap); // 예외 발생
+
+            // return ResponseEntity.badRequest().body(new CMRespDto<>(-1, "유효성 검사 실패", errorMap));
         }
-        return joinPoint.proceed();
+        // return joinPoint.proceed();
     }
+
+    @AfterReturning(value = "annotationValid()", returning = "returnObj") // return object ; api 에서 유효성 검사를 @Before 에서 실행함.
+    // 실행 후에 AfterReturning 이 있어야지만 메소드로 다시 돌아가게 됨.
+    public void afterReturning(JoinPoint joinPoint, Object returnObj) {
+        log.info("Validation success: {}", returnObj);
+    }
+
 }
 
 
