@@ -16,12 +16,9 @@ for(let i = 0; i < registerInputs.length; i++) {
 
 registerInputs.forEach((input, index) => {
     input.onkeyup = () => {
-
         }
-
     }
-
-})
+});
 
 
 
