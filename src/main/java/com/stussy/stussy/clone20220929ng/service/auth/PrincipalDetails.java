@@ -21,7 +21,7 @@ public class PrincipalDetails implements UserDetails { // ctrl I ; Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        authorities.add(() -> user.getRole()); // -> new GrantedAuthority() 랑 같음.
+        authorities.add(() -> user.getRole().getRole()); // -> new GrantedAuthority() 랑 같음.
 
         return authorities;
     }

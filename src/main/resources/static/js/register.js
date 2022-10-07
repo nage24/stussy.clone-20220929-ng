@@ -13,20 +13,8 @@ for(let i = 0; i < registerInputs.length; i++) {
 }
 
 
-
-registerInputs.forEach((input, index) => {
-    input.onkeyup = () => {
-        }
-    }
-});
-
-
-
-
-
-
 registerButton.onclick = () => {
-    const registerInputs = document.querySelectorAll(".login-input");
+    // const registerInputs = document.querySelectorAll(".login-input");
 
 
         let registerInfo = {
@@ -66,10 +54,10 @@ function validationError(error) { // error 객체  value 만 뽑아서  forEach 
     accountErrorList.innerHTML = ""; // 초기화
 
     errorValues.forEach((value) => {
-        accountErrorList.innerHTML = `
+        accountErrorList.innerHTML += `
                     <li>${value}</li>
         `;
-    })
+    });
 
-    accountErrors.classList.remove("account-invisible");
+    accountErrors.classList.remove("errors-invisible");
 }

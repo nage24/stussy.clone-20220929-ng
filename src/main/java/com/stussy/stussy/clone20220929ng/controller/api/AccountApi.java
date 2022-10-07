@@ -77,7 +77,7 @@ public class AccountApi {
         accountService.register(registerReqDto); // 예외처리?
 
 
-        return ResponseEntity.ok().body(new CMRespDto(1, "Successfully registered", registerReqDto));
+        return ResponseEntity.ok().body(new CMRespDto<>(1, "Successfully registered", registerReqDto));
     }
 
 }
