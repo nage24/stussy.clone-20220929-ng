@@ -58,7 +58,7 @@ public class ValidationAOP {
                 errorMap.put(error.getField(), error.getDefaultMessage());
             });
 
-            // throw new CustomValidationException("Validation failed", errorMap); // 예외 발생
+            throw new CustomValidationException("Validation failed", errorMap); // 예외 발생
 
             // return ResponseEntity.badRequest().body(new CMRespDto<>(-1, "유효성 검사 실패", errorMap));
         }
