@@ -9,7 +9,7 @@ import java.util.List;
 @Mapper
 public interface ProductRepository {
 
-    public int addProduct(Product product) throws Exception;
+    public int saveProduct(Product product) throws Exception;
     public int saveImgFiles(List<ProductImgFile> product_img_files) throws Exception;
 
 }

@@ -16,15 +16,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/api/admin")
 @RestController
+@RequiredArgsConstructor
 public class ProductApi {
+
+    private final ProductService productService;
 
     @ValidAspect
     @LogAspect
     @PostMapping("/product")
-    public ResponseEntity<?> addProduct(@Validated(ValidationSequence.class)ProductAdditionReqDto productAdditionReqDto, BindingResult bindingResult) {
+    public ResponseEntity<?> addProduct(@Validated(ValidationSequence.class) ProductAdditionReqDto productAdditionReqDto, BindingResult bindingResult) throws  Exception {
 
 
-        return ResponseEntity.ok().body(new CMRespDto<>(1, "Successfully added", null));
+        return ResponseEntity
+                .created(null)
+                .body(new CMRespDto<>(1, "Successfully added", productService.addProduct(productAdditionReqDto)));
     }
 
 }

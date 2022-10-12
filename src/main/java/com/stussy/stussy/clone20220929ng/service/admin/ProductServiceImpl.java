@@ -24,47 +24,46 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService{
 
-    private final ProductRepository productRepository;
-
     @Value("${file.path}")
     private String filePath;
+
+    private final ProductRepository productRepository;
 
     @Override
     public boolean addProduct(ProductAdditionReqDto productAdditionReqDto) throws Exception {
         int resultCount = 0;
 
         List<MultipartFile> files = productAdditionReqDto.getFiles();
-        List<ProductImgFile> productImgFiles = null; // new ArrayList<ProductImgFile>();
+        List<ProductImgFile> productImgFiles = null;
 
         Product product = productAdditionReqDto.toProductEntity();
-        resultCount = productRepository.addProduct(product);
+        resultCount = productRepository.saveProduct(product);
 
         if(files != null) {
             int productId = product.getId();
             productImgFiles = getProductImgFiles(files, productId);
-            resultCount += productRepository.saveImgFiles(productImgFiles);
+            resultCount = productRepository.saveImgFiles(productImgFiles);
         }
 
         if(resultCount == 0){
             throw new CustomInternalServerErrorException("상품 등록 실패");
         }
 
-        return resultCount != 0; // 0 이 아니면 true ; 0(insert 되지 않음) 이면 false
+        return true;
     }
 
     private List<ProductImgFile> getProductImgFiles(List<MultipartFile> files, int productId) throws Exception {
-
         List<ProductImgFile> productImgFiles = new ArrayList<ProductImgFile>();
 
         files.forEach(file -> {
             String originName = file.getOriginalFilename();
-            String extention = originName.substring(originName.lastIndexOf(".")); // 확장자명 . 부터 끝까지
-            String temp_name = UUID.randomUUID().toString() + extention;
+            String extension = originName.substring(originName.lastIndexOf("."));
+            String temp_name = UUID.randomUUID().toString() + extension;
 
-            Path uploadPath = Paths.get(filePath, "/product" + temp_name);
+            Path uploadPath = Paths.get(filePath + "/product" + temp_name);
 
-            File f = new File(filePath, "/product");
-            if (!f.exists()) {
+            File f = new File(filePath + "/product");
+            if(!f.exists()) {
                 f.mkdirs();
             }
 
@@ -75,13 +74,12 @@ public class ProductServiceImpl implements ProductService{
             }
 
             ProductImgFile productImgFile = ProductImgFile.builder()
-                    .product_id(0)
+                    .product_id(productId)
                     .origin_name(originName)
                     .temp_name(temp_name)
                     .build();
 
             productImgFiles.add(productImgFile);
-
         });
 
         return productImgFiles;

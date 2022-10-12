@@ -16,8 +16,8 @@
     <resultMap id="product" type="com.stussy.stussy.clone20220929ng.domain.Product">
         <result property="id" column="id"></result>
         <result property="category" column="category"></result>
-        <result property="name" column="name"></result>
         <result property="group_id" column="group_id"></result>
+        <result property="name" column="name"></result>
         <result property="price" column="price"></result>
         <result property="color" column="color"></result>
         <result property="size" column="size"></result>
@@ -26,7 +26,6 @@
         <result property="info_option" column="info_option"></result>
         <result property="info_management" column="info_management"></result>
         <result property="info_shipping" column="info_shipping"></result>
-        <result property="img_id" column="img_id"></result>
 
         <result property="create_date" column="create_date"></result>
         <result property="update_date" column="update_date"></result>
@@ -46,7 +45,7 @@
             (SELECT
                 0,
                 #{category},
-                IFNULL( (SELECT
+                IFNULL((SELECT
                              MAX(group_id)
                         FROM
                             product_mst
@@ -59,27 +58,25 @@
                 #{info_detail},
                 #{info_option},
                 #{info_management},
+                #{info_shipping},
                 now(),
                 now()
-
             FROM
                 product_mst
         );
     </insert>
-
-
 
     <insert id="saveImgFiles" parameterType="java.util.List">
 
         insert into
             product_img
         values
-            <foreach item="file" collection="List" separator=",">\
+            <foreach item="file" collection="list" separator=",">
                 (
                     0,
-                    #{product_id},
-                    #{origin_name},
-                    #{temp_name},
+                    #{file.product_id},
+                    #{file.origin_name},
+                    #{file.temp_name},
                     now(),
                     now()
                 )

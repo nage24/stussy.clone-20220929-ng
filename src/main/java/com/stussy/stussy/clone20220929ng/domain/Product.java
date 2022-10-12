@@ -15,8 +15,8 @@ public class Product {
 
     private int id;
     private String category;
-    private String name;
     private String group_id;
+    private String name;
     private int price;
     private String color;
     private String size;
@@ -27,7 +27,6 @@ public class Product {
     private String info_management;
     private String info_shipping;
 
-    private int img_id;
     private List<ProductImgFile> product_img_files;
 
     private LocalDateTime create_date;
