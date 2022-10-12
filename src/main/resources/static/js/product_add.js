@@ -10,15 +10,21 @@ fileAddButton.onclick = () => {
 
 fileInput.onchange = () => {
     const formData = new FormData(document.querySelector("form"));
+    let changeFlge
 
     formData.forEach((value) => {
         if(value.size != 0) {
             productImageFiles.push(value);
             console.log(productImageFiles);
-            getImagePreview();
-            fileInput.value = null;
+
+            changeFlge = true; // 반복이 계속 도는 경우 발생; -> changeFlag 가 일어났을 때 , 
         }
     });
+
+    if(changeFlge){
+        getImagePreview();  // 이미지를 로드해주겠다. 
+        fileInput.value = null;
+    }
 }
 
 function getImagePreview() {
@@ -51,7 +57,55 @@ function getImagePreview() {
         }
 
         setTimeout(reader.readAsDataURL(file), i * 100);
-
-
     });
+}
+
+
+submitButton.onclick = () => {
+    const productInputs = document.querySelectorAll(".product-input");
+
+    let formData = new FormData(); // formdata 생성 하여 값들을 form 에 차곡차곡 담아서 보내 줄 것
+
+    formData.append("category", productInputs[0].value);
+    formData.append("name", productInputs[1].value);
+    formData.append("price", productInputs[2].value);
+    formData.append("color", productInputs[3].value);
+    formData.append("size", productInputs[4].value);
+    formData.append("infoSimple", productInputs[5].value);
+    formData.append("infoDetail", productInputs[6].value);
+    formData.append("infoOption", productInputs[7].value);
+    formData.append("infoManagement", productInputs[8].value);
+    formData.append("infoShipping", productInputs[9].value);
+
+    // formData 는 같은 key 값으로 계속 append 시키면 ->  Array 로 들어가게 됨
+
+    productImageFiles.forEach((file) => {
+        formData.append("files", file);
+    });    
+
+    request(formData);
+}
+
+function request(formData) {
+
+    $.ajax({
+        async: false,
+        type: "post", 
+        url: "/api/admin/product",
+        
+        enctype: "multipart/form-data",
+        contentType: false, 
+        processData: false,
+        data: formData,
+        dataType: "json", 
+        success: (response) => {
+            alert("상품 등록 완료");
+        },
+        error: (error) => {
+            alert("상품 등록 실패");
+            console.log(error);
+        }
+    });
+
+
 }

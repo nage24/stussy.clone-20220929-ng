@@ -27,8 +27,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests() //모든 요청시에 실행을 해라
 
                 /*<<<<<<<<<<<<<<<<<< Page >>>>>>>>>>>>>>>>*/
-                .antMatchers("/admin/**")
-                .access("hasRole('ADMIN') or hasRole('MANAGER')")
+                // Testing 시 로그인 필요하기 때문에 잠깐 꺼 두었어요 . . .
+//                .antMatchers("/admin/**")
+//                .access("hasRole('ADMIN') or hasRole('MANAGER')")
+
+
                 .antMatchers("/account") //해당 요청 주소들은
                 .access("hasRole('USER') or hasRole('ADMIN') or hasRole('MANAGER')")
 
