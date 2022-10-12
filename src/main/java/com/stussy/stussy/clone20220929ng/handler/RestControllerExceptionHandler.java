@@ -1,6 +1,7 @@
 package com.stussy.stussy.clone20220929ng.handler;
 
 import com.stussy.stussy.clone20220929ng.dto.CMRespDto;
+import com.stussy.stussy.clone20220929ng.exception.CustomInternalServerErrorException;
 import com.stussy.stussy.clone20220929ng.exception.CustomValidationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,6 +19,15 @@ public class RestControllerExceptionHandler {
                 .body(new CMRespDto<>(-1, e.getMessage(), e.getErrorMap()));
 
         // return ResponseEntity.badRequest().body(new CMRespDto<>(-1, "Validation Error!", null));
+    }
+
+
+    @ExceptionHandler(CustomInternalServerErrorException.class)
+    public ResponseEntity<?> internalServerErrorException(CustomInternalServerErrorException e) {
+
+        return ResponseEntity
+                .internalServerError()
+                .body(new CMRespDto<>(-1, e.getMessage(), null));
     }
 
 }
