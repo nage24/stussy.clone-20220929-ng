@@ -1,13 +1,16 @@
 package com.stussy.stussy.clone20220929ng.service;
 
+import com.stussy.stussy.clone20220929ng.domain.Product;
 import com.stussy.stussy.clone20220929ng.domain.User;
 import com.stussy.stussy.clone20220929ng.dto.account.RegisterReqDto;
 import com.stussy.stussy.clone20220929ng.exception.CustomValidationException;
 import com.stussy.stussy.clone20220929ng.repository.AccountRepository;
+import com.stussy.stussy.clone20220929ng.repository.admin.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -15,6 +18,7 @@ import java.util.Map;
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
+    private final ProductRepository productRepository;
 
     @Override
     public boolean checkDuplicatedEmail(String email) {

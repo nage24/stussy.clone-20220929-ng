@@ -16,9 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -83,6 +81,15 @@ public class ProductServiceImpl implements ProductService{
         });
 
         return productImgFiles;
+    }
+
+    @Override
+    public List<Product> getProductList(int pageNumber, String category, String searchText) throws Exception {
+        Map<String, Object> paramsMap = new HashMap<String, Object>();
+        paramsMap.put("pageNumber", (pageNumber - 1) * 10);
+
+        productRepository.getProductList(paramsMap);
+        return null;
     }
 
 }

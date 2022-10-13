@@ -103,3 +103,140 @@ textarea {
 
     cursor: pointer;
 }
+
+/*<<<<<<<<<<<<<<<<<<<<<<<<<< LIST >>>>>>>>>>>>>>>>>>>>>>>>*/
+
+
+.list-header { 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.category-select {
+    width: 200px;
+}
+
+.product-search {
+    display: flex;
+    justify-content: flex-end;
+    width: 400px;
+    align-items: center;
+}
+
+.product-search input, button {
+    margin: 0px 0px 15px 10px;
+    padding: 10px;
+}
+
+.page-button {
+    display: flex;
+    width: 140px;
+    justify-content: space-between;
+    margin: 15px 0px;
+}
+
+.page-button li {
+    border: 1px solid rgb(198,198,198);
+    border-radius: 2px;
+    width: 17px;
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid gainsboro;
+}
+
+th, td {
+    border: 1px solid gainsboro;
+    padding: 5px 5px;
+    text-align: center;
+}
+
+.product-list {
+    margin-bottom: 30px;
+}
+
+.product-info {
+    border: none;
+}
+
+.product-info textarea {
+    height: 80px;
+}
+
+th:nth-child(1) {
+    width: 70px;
+}
+th:nth-child(2) {
+    width: 120px;
+}
+th:nth-child(4) {
+    width: 100px;
+}
+th:nth-child(5) {
+    width: 100px;
+}
+th:nth-child(6) {
+    width: 70px;
+}
+th:nth-child(7) {
+    width: 70px;
+}
+th:nth-child(8) {
+    width: 70px;
+}
+
+td:nth-child(1) {
+    text-align: left;
+}
+
+td:nth-child(2) {
+    text-align: left;
+}
+
+td:nth-child(3) {
+    text-align: left;
+}
+
+td:nth-child(4) {
+    text-align: right;
+}
+
+.product-list th, .product-list td {
+    padding: 5px 5px;
+    height: 25px;
+}
+
+.product-info td {
+    border: none;
+}
+
+.detail-invisible {
+    display: none;
+}
+
+.list-button {
+    margin: 0;
+    border: none;
+    border-radius: 5px;
+    width: 40px;
+    height: 30px;
+    padding: 0;
+}
+
+.detail-button {
+    color: rgb(31, 110, 255);
+}
+
+.delete-button {
+    color: rgb(255, 42, 42);
+}
+
+.update-button {
+    margin: 0px;
+    width: 100%;
+    padding: 15px;
+}
