@@ -28,14 +28,14 @@ public class ProductApi {
     @PostMapping("/product")
     public ResponseEntity<?> addProduct(@Validated(ValidationSequence.class) ProductAdditionReqDto productAdditionReqDto, BindingResult bindingResult) throws  Exception {
 
-        String productName = productAdditionReqDto.getName();
-
-        for(int i  = 0; i < 200; i++) {
-            if(i % 4 == 0){
-                productAdditionReqDto.setName(productName + "-" + (i + 1)); // a b c d ...
-            }
-            productService.addProduct(productAdditionReqDto);
-        }
+//        String productName = productAdditionReqDto.getName();
+//
+//        for(int i  = 0; i < 200; i++) {
+//            if(i % 4 == 0){
+//                productAdditionReqDto.setName(productName + "-" + (i + 1)); // a b c d ...
+//            }
+//            productService.addProduct(productAdditionReqDto);
+//        }
 
 
         return ResponseEntity

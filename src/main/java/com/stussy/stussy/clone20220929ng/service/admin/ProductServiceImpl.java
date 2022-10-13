@@ -86,10 +86,9 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public List<Product> getProductList(int pageNumber, String category, String searchText) throws Exception {
         Map<String, Object> paramsMap = new HashMap<String, Object>();
-        paramsMap.put("pageNumber", (pageNumber - 1) * 10);
+        paramsMap.put("index", (pageNumber - 1) * 10);
 
-        productRepository.getProductList(paramsMap);
-        return null;
+        return productRepository.getProductList(paramsMap);
     }
 
 }

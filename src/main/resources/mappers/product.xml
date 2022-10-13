@@ -83,7 +83,7 @@
             </foreach>
     </insert>
 
-    <select id="getProductList" parameterType="java.util.HashMap" resultMap="prduct">
+    <select id="getProductList" parameterType="java.util.HashMap" resultMap="product">
 
         SELECT
             pm.id,
@@ -114,7 +114,6 @@
             LIMIT #{index}, 10) pm
 
         LEFT OUTER JOIN product_img pim ON (pim.product_id = pm.id);
-
 
     </select>
 

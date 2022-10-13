@@ -107,7 +107,7 @@ textarea {
 /*<<<<<<<<<<<<<<<<<<<<<<<<<< LIST >>>>>>>>>>>>>>>>>>>>>>>>*/
 
 
-.list-header { 
+.list-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -132,8 +132,9 @@ textarea {
 .page-button {
     display: flex;
     width: 140px;
-    justify-content: space-between;
+    justify-content: space-around;
     margin: 15px 0px;
+    width: 140px;
 }
 
 .page-button li {
@@ -167,6 +168,10 @@ th, td {
     height: 80px;
 }
 
+.list-button .fa-regular {
+    font-size: 14px;
+}
+
 th:nth-child(1) {
     width: 70px;
 }
@@ -187,10 +192,6 @@ th:nth-child(7) {
 }
 th:nth-child(8) {
     width: 70px;
-}
-
-td:nth-child(1) {
-    text-align: left;
 }
 
 td:nth-child(2) {
