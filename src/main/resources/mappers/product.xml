@@ -26,6 +26,7 @@
         <result property="info_option" column="info_option"></result>
         <result property="info_management" column="info_management"></result>
         <result property="info_shipping" column="info_shipping"></result>
+        <result property="product_total_count" column="product_total_count"></result>
 
         <result property="create_date" column="create_date"></result>
         <result property="update_date" column="update_date"></result>
@@ -100,20 +101,48 @@
             pm.info_shipping,
             pm.create_date,
             pm.update_date,
-
             pim.id AS img_id,
             pim.product_id,
             pim.origin_name,
-            pim.temp_name
+            pim.temp_name,
+            pc.product_total_count
 
-        FROM
+        from
             (SELECT
-                 *
+                *
             FROM
-                 product_mst
+                product_mst
+            WHERE
+                i = 1 <!-- 항상 참 인 조건-->
+
+            <if test='category != "ALL"'>
+                <!-- if-else 문 -> choose; when : if / otherwise : else ; 추가 옵션 -->
+                AND category =  #{category}
+            </if>
+            <if test='searchText != NULL || searchText != ""'>
+                AND name like CONCAT('%', #{searchText} , '%') <!-- 표현식 사용 -->
+            </if>
+
             LIMIT #{index}, 10) pm
 
-        LEFT OUTER JOIN product_img pim ON (pim.product_id = pm.id);
+            left outer join product_img pim ON(pim.product_id = pm.id)
+            left outer join (
+                            select
+                                count(*) as product_total_count
+                            from
+                                product_mst
+                            where
+                            i = 1 <!-- 항상 참 인 조건-->
+                            <if test='category != "ALL"'>
+                                <!-- if-else 문 -> choose; when : if / otherwise : else ; 추가 옵션 -->
+                                AND category =  #{category}
+                            </if>
+                            <if test='searchText != NULL || searchText != ""'>
+                                AND name like CONCAT('%', #{searchText} , '%') <!-- 표현식 사용 -->
+                            </if>
+                            ) pc on(1=1)
+
+        <!-- 상품 없을 때 설정 필요. -->
 
     </select>
 

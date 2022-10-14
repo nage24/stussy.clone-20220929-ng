@@ -1,6 +1,4 @@
 const categorySelectInput = document.querySelector(".category-select .product-input");
-const searchInput = document.querySelector(".product-search .product-input")
-const searchButton = document.querySelector(".search-button");
 
 let page = 1;
 let category = "ALL";
@@ -16,29 +14,81 @@ function getList() {
         type: "get",
         url: "/api/admin/products",
         data: {
-            pageNumber: page,
-            category: category,
-            searchText: searchText
+            "pageNumber": page,
+            "category": category,
+            "searchText": searchText
         },
         dataType: "json",
         success: (response) => {
             console.log(response);
-
-            if(response.data.length != 0) {
-                loadPageNumberButtons(response.data[0].productTatalCount);
-                addProducts(response.data);
-            }else {
-                alert("해당 카테고리의 상품이 없습니다 ⊙﹏⊙^∥")
-                location.reload();
-            }
-
-            
+            loadPageNumberButtons(response.data[0].productTotalCount);
+            addProducts(response.data);
         },
         error: (error) => {
             console.log(error);
         }
     });
 }
+
+categorySelectInput.onchange = () => {
+    page = 1;
+    category = categorySelectInput.value;
+    getList();
+}
+
+function loadPageNumberButtons(productTotalCount) {
+    const pageButtons = document.querySelector(".page-buttons");
+
+    pageButtons.innerHTML = "";
+
+    let maxPage = (productTotalCount % 10 == 0) ? productTotalCount / 10 : Math.floor(productTotalCount / 10) + 1;
+    let minPage = 1;
+
+    let startIndex = page % 5 == 0 ? page - 4 : page - (page % 5) + 1;
+    let endIndex = startIndex + 4 <= maxPage ? startIndex + 4 : maxPage;
+
+    console.log(`
+    totalCount = ${productTotalCount}
+    maxPage = ${maxPage}
+    startIndex = ${startIndex}
+    endIndex = ${endIndex}
+    `);
+
+    if(page != 1){
+        pageButtons.innerHTML = `<a href="javascript:void(0)"><li>&#60;</li></a>`;
+    }
+    for(let i = startIndex; i <= endIndex; i++) {
+        if(i == page) {
+            pageButtons.innerHTML += `<a href="javascript:void(0)" class="a-selected"><li>${i}</li></a>`;
+        }else {
+            pageButtons.innerHTML += `<a href="javascript:void(0)"><li>${i}</li></a>`;
+        }
+        
+    }
+    if(page != maxPage){
+        pageButtons.innerHTML += `<a href="javascript:void(0)"><li>&#62;</li></a>`;
+    }
+
+    const pageNumbers = pageButtons.querySelectorAll("li");
+
+    for(let i = 0; i < pageNumbers.length; i++) {
+        pageNumbers[i].onclick = () => {
+            let pageNumberText = pageNumbers[i].textContent;
+
+            if(pageNumberText == "<") {
+                --page;
+            }else if(pageNumberText == ">") {
+                ++page;
+            }else {
+                page = pageNumberText;
+            }
+
+            getList();
+        }
+    }
+
+}   
+
 
 function addProducts(productList) {
     const listBody = document.querySelector(".list-body");
@@ -133,86 +183,3 @@ function addProducts(productList) {
     });
 
 }
-
-
-
-
-function loadPageNumberButtons(productTotalCount) {
-    const pageButtons = document.querySelector(".page-buttons");
-
-    pageButtons.innerHTML = "";
-
-    let maxPage = (productTotalCount % 10 == 0) ? productTotalCount / 10 : Math.floor(productTotalCount / 10) + 1;
-    let minPage = 1;
-
-    let startIndex = page % 5 == 0 ? page - 4 : page - (page % 5) + 1;
-    let endIndex = startIndex + 4 <= maxPage ? startIndex + 4 : maxPage;
-
-    console.log(`
-    totalCount = ${productTotalCount}
-    maxPage = ${maxPage}
-    startIndex = ${startIndex}
-    endIndex = ${endIndex}
-    `);
-
-// 5의 배수에 페이지 번호 맞출 수 있다 . . . 
-// 의 배수가 아닐 때는 페이지에서 5로 나눈 나머지를 빼고 -> 에 1을 더 해주면 페이지 번호이다 .. . 
-
-
-    if(page != 1) {
-        pageButtons.innerHTML += '<a href="javascript:void(0)"><li> &#60;</li></a>';
-    } // 1 페이지에서는 이전 페이지로 갈 수 없음. 
-
-    
-    for(let i = startIndex; i <= endIndex; i++) {
-        if(i == page) {
-            pageButtons.innerHTML += '<a href="javascript:void(0)" class="a-selected"><li>${i}</li></a>';
-        } else { 
-            pageButtons.innerHTML += '<a href="javascript:void(0)"><li>${i}</li></a>';
-        }
-    }
-
-
-    if(page != maxPage) {
-        pageButtons.innerHTML += '<a href="javascript:void(0)"><li> &#62;</li></a>'
-    } // 마지막 페이지에서는 다음 페이지로 갈 수 없음. 
-    
-    const pageNumbers = pageButtons.querySelector("li");
-
-    for(let i = 0; i < pageNumbers.length; i++) {
-        pageNumbers[i].onclick = () => {
-            let pageNumberText = pageNumbers[i].textContent;
-
-            if(pageNumberText == "<") {
-                --page;
-            }else if(pageNumberText == ">") {
-                ++page;
-            }else {
-                page = pageNumberText;
-            }
-
-            getList();
-        }
-    }
-
-}   
-
-categorySelectInput.onchange = () => {
-    page = 1;
-    category = categorySelectInput.value;
-    getList();
-}
-
-searchInput.onkeyup = () => {
-    if(window.event.keyCode == 13) {
-        searchButton.click();
-    }
-}
-
-searchButton.onclick = () => {
-    page = 1;
-    category = categorySelectInput.value;
-    searchText = searchInput.value;
-    getList();
-}
-

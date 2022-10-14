@@ -2,6 +2,7 @@ package com.stussy.stussy.clone20220929ng.repository.admin;
 
 import com.stussy.stussy.clone20220929ng.domain.Product;
 import com.stussy.stussy.clone20220929ng.domain.ProductImgFile;
+import com.stussy.stussy.clone20220929ng.dto.admin.ProductListRespDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

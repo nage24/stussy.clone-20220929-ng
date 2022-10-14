@@ -30,11 +30,11 @@ public class ProductAdditionReqDto { // Validation check
     private String size;
 
 
-    private String info_simple;
-    private String info_detail;
-    private String info_option;
-    private String info_management;
-    private String info_shipping;
+    private String infoSimple;
+    private String infoDetail;
+    private String infoOption;
+    private String infoManagement;
+    private String infoShipping;
     private List<MultipartFile> files;
 
 
@@ -46,11 +46,11 @@ public class ProductAdditionReqDto { // Validation check
                 .price(price)
                 .color(color)
                 .size(size)
-                .info_simple(info_simple)
-                .info_detail(info_detail)
-                .info_option(info_option)
-                .info_management(info_management)
-                .info_shipping(info_shipping)
+                .info_simple(infoSimple)
+                .info_detail(infoDetail)
+                .info_option(infoOption)
+                .info_management(infoManagement)
+                .info_shipping(infoShipping)
                 .build();
     }
 
