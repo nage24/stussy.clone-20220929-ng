@@ -10,9 +10,8 @@
         <result property="product_id" column="product_id"></result>
         <result property="origin_name" column="origin_name"></result>
         <result property="temp_name" column="temp_name"></result>
-
-
     </resultMap>
+
     <resultMap id="product" type="com.stussy.stussy.clone20220929ng.domain.Product">
         <result property="id" column="id"></result>
         <result property="category" column="category"></result>
@@ -113,7 +112,7 @@
             FROM
                 product_mst
             WHERE
-                i = 1 <!-- 항상 참 인 조건-->
+                1 = 1 <!-- 항상 참 인 조건-->
 
             <if test='category != "ALL"'>
                 <!-- if-else 문 -> choose; when : if / otherwise : else ; 추가 옵션 -->
@@ -132,7 +131,7 @@
                             from
                                 product_mst
                             where
-                            i = 1 <!-- 항상 참 인 조건-->
+                            1 = 1 <!-- 항상 참 인 조건 -->
                             <if test='category != "ALL"'>
                                 <!-- if-else 문 -> choose; when : if / otherwise : else ; 추가 옵션 -->
                                 AND category =  #{category}
