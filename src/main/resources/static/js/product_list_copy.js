@@ -1,8 +1,13 @@
 const categorySelectInput = document.querySelector(".category-select .product-input");
+const searchInput = document.querySelector(".product-search .product-input");
+const searchButton = document.querySelector(".search-button");
+
+let productDataList = null;
 
 let page = 1;
 let category = "ALL";
 let searchText = "";
+
 
 window.onload = () => {
     getList();
@@ -21,8 +26,14 @@ function getList() {
         dataType: "json",
         success: (response) => {
             console.log(response);
-            loadPageNumberButtons(response.data[0].productTotalCount);
-            addProducts(response.data);
+            if(response.data.length != 0) {
+                loadPageNumberButtons(response.data[0].productTotalCount);
+                productDataList = response.data;
+                addProducts(productDataList);
+            }else {
+                alert("등록된 상품이 없습니다.");
+                location.reload();
+            }
         },
         error: (error) => {
             console.log(error);
@@ -33,6 +44,19 @@ function getList() {
 categorySelectInput.onchange = () => {
     page = 1;
     category = categorySelectInput.value;
+    getList();
+}
+
+searchInput.onkeyup = () => {
+    if(window.event.keyCode == 13) {
+        searchButton.click();
+    }
+}
+
+searchButton.onclick = () => {
+    page = 1;
+    category = categorySelectInput.value;
+    searchText = searchInput.value;
     getList();
 }
 
@@ -63,7 +87,7 @@ function loadPageNumberButtons(productTotalCount) {
         }else {
             pageButtons.innerHTML += `<a href="javascript:void(0)"><li>${i}</li></a>`;
         }
-        
+
     }
     if(page != maxPage){
         pageButtons.innerHTML += `<a href="javascript:void(0)"><li>&#62;</li></a>`;
@@ -87,7 +111,7 @@ function loadPageNumberButtons(productTotalCount) {
         }
     }
 
-}   
+}
 
 
 function addProducts(productList) {
@@ -95,8 +119,8 @@ function addProducts(productList) {
 
     listBody.innerHTML = "";
 
-    productList.forEach((product) => {
-        
+    productList.forEach((product, index) => {
+
         listBody.innerHTML += `
         <tr>
             <td class="product-id">${product.id}</td>
@@ -109,62 +133,9 @@ function addProducts(productList) {
             <td><button type="button" class="list-button delete-button"><i class="fa-regular fa-trash-can"></i></button></td>
         </tr>
         <tr class="product-detail detail-invisible">
-            <td colspan="8">
-                <table class="product-info">
-                    <tr>
-                        <td><input type="text" class="product-input" value="${product.price}" placeholder="가격"></td>
-                        <td><input type="text" class="product-input" value="${product.color}" placeholder="색상"></td>
-                        <td><input type="text" class="product-input" value="${product.size}" placeholder="사이즈"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="3">
-                            <textarea class="product-input" placeholder="간략 설명">${product.infoSimple}</textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="3">
-                            <textarea class="product-input" placeholder="상세 설명">${product.infoDetail}</textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="3">
-                            <textarea class="product-input" placeholder="기타 설명">${product.infoOption}</textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="3">
-                            <textarea class="product-input" placeholder="관리 방법">${product.infoManagement}</textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="3">
-                            <textarea class="product-input" placeholder="배송 설명">${product.infoShipping}</textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="3">
-                            <form enctype="multipart/form-data">
-                                <div class="product-img-inputs">
-                                    <label>상품 이미지</label>
-                                    <button type="button" class="add-button">추가</button>
-                                    <input type="file" class="file-input product-invisible" name="file" multiple>
-                                </div>
-                            </form>
-                            <div class="product-images">
-                                
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="3">
-                            <button type="button" class="black-button update-button">수정하기</button>
-                        </td>
-                    </tr>
-                </table>
-            </td>
+
         </tr>
         `;
-
     });
 
     const detailButtons = document.querySelectorAll(".detail-button");
@@ -172,14 +143,96 @@ function addProducts(productList) {
 
     detailButtons.forEach((detailButton, index) => {
         detailButton.onclick = () => {
-            productDetails.forEach((productDetail, index2) => {
-                if(index2 != index){
-                    productDetail.classList.add("detail-invisible");
-                }
-            })
 
-            productDetails[index].classList.toggle("detail-invisible");
+            if(productDetails[index].classList.contains("detail-invisible")) {
+                let changeRequestFlag = false;
+                let changeFlag = false;
+                productDetails.forEach((productDetail, index2) => {
+                    if(!productDetail.classList.contains("detail-invisible") && index2 != index){
+                        changeRequestFlag = true;
+                        changeFlag = confirm("수정을 취소하시겠습니까?");
+                        if(changeFlag) {
+                            productDetail.classList.add("detail-invisible");
+                            productDetail.innerHTML = "";
+                            getProductDetail(productDetails[index], index);
+                            productDetails[index].classList.remove("detail-invisible");
+                        }
+                    }else {
+                        if(changeRequestFlag && changeFlag) {
+                            getProductDetail(productDetails[index], index);
+                            productDetails[index].classList.remove("detail-invisible");
+                        }else if(!changeRequestFlag) {
+                            getProductDetail(productDetails[index], index);
+                            productDetails[index].classList.remove("detail-invisible");
+                        }
+                    }
+                });
+
+            }else{
+                if(confirm("수정을 취소하시겠습니까?")){
+                    productDetails[index].classList.add("detail-invisible");
+                    productDetails[index].innerHTML = "";
+                }
+            }
         }
     });
+}
+
+function getProductDetail(productDetail, index) {
+    productDetail.innerHTML = `
+    <td colspan="8">
+        <table class="product-info">
+            <tr>
+                <td><input type="text" class="product-input" value="${productDataList[index].price}" placeholder="가격"></td>
+                <td><input type="text" class="product-input" value="${productDataList[index].color}" placeholder="색상"></td>
+                <td><input type="text" class="product-input" value="${productDataList[index].size}" placeholder="사이즈"></td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <textarea class="product-input" placeholder="간략 설명">${productDataList[index].infoSimple}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <textarea class="product-input" placeholder="상세 설명">${productDataList[index].infoDetail}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <textarea class="product-input" placeholder="기타 설명">${productDataList[index].infoOption}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <textarea class="product-input" placeholder="관리 방법">${productDataList[index].infoManagement}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <textarea class="product-input" placeholder="배송 설명">${productDataList[index].infoShipping}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <form enctype="multipart/form-data">
+                        <div class="product-img-inputs">
+                            <label>상품 이미지</label>
+                            <button type="button" class="add-button">추가</button>
+                            <input type="file" class="file-input product-invisible" name="file" multiple>
+                        </div>
+                    </form>
+                    <div class="product-images">
+
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <button type="button" class="black-button update-button">수정하기</button>
+                </td>
+            </tr>
+        </table>
+    </td>
+    `;
 
 }

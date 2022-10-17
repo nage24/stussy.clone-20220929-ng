@@ -29,9 +29,9 @@ function getList() {
             console.log(response);
 
             if(response.data.length != 0) {
-                loadPageNumberButtons(response.data[0].productTatalCount);
+                loadPageNumberButtons(response.data[0].productTotalCount);
                 productDataList = response.data;
-                addProducts(response.data);
+                addProducts(productDataList);
             }else {
                 alert("해당 카테고리의 상품이 없습니다 ⊙﹏⊙^∥")
                 location.reload();
@@ -69,24 +69,24 @@ function loadPageNumberButtons(productTotalCount) {
 // 의 배수가 아닐 때는 페이지에서 5로 나눈 나머지를 빼고 -> 에 1을 더 해주면 페이지 번호이다 .. .
 
     if(page != 1) {
-        pageButtons.innerHTML += '<a href="javascript:void(0)"><li> &#60;</li></a>';
+        pageButtons.innerHTML = `<a href="javascript:void(0)"><li> &#60;</li></a>`;
     } // 1 페이지에서는 이전 페이지로 갈 수 없음.
 
 
     for(let i = startIndex; i <= endIndex; i++) {
         if(i == page) {
-            pageButtons.innerHTML += '<a href="javascript:void(0)" class="a-selected"><li>${i}</li></a>';
+            pageButtons.innerHTML += `<a href="javascript:void(0)" class="a-selected"><li>${i}</li></a>`;
         } else {
-            pageButtons.innerHTML += '<a href="javascript:void(0)"><li>${i}</li></a>';
+            pageButtons.innerHTML += `<a href="javascript:void(0)"><li>${i}</li></a>`;
         }
     }
 
 
     if(page != maxPage) {
-        pageButtons.innerHTML += '<a href="javascript:void(0)"><li> &#62;</li></a>'
+        pageButtons.innerHTML += `<a href="javascript:void(0)"><li> &#62;</li></a>`;
     } // 마지막 페이지에서는 다음 페이지로 갈 수 없음.
 
-    const pageNumbers = pageButtons.querySelector("li");
+    const pageNumbers = pageButtons.querySelectorAll("li");
 
     for(let i = 0; i < pageNumbers.length; i++) {
         pageNumbers[i].onclick = () => {
@@ -147,7 +147,7 @@ function addProducts(productList) {
             <td><button type="button" class="list-button detail-button"><i class="fa-regular fa-file-lines"></i></button></td>
             <td><button type="button" class="list-button delete-button"><i class="fa-regular fa-trash-can"></i></button></td>
         </tr>
-        <tr class="product-detail detail-invisible"> // product-detail
+        <tr class="product-detail detail-invisible">
 
         </tr>
         `;
