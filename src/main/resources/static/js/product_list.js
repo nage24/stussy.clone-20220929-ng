@@ -2,46 +2,141 @@ const categorySelectInput = document.querySelector(".category-select .product-in
 const searchInput = document.querySelector(".product-search .product-input");
 const searchButton = document.querySelector(".search-button"); 
 
+let productRepository = {
+    상품관련리스트: new Array(),
+    clear상품관련리스트: () => {
+        this.상품관련리스트.forEach(list => {
+            while(list.length != 0) {
+                list.pop();
+            }
+        });
+    },
+    push상품관련리스트: (list) => {
+        this.상품관련리스트.push(list);
+    }
+}
+
+let 상품리스트requestParams = {
+    page: 1,
+    category: "ALL",
+    searchText: ""
+}
+
 let productDataList = null;
 let productImgList = null;
 let productFileImgList = new Array();
 let productImageFiles = new Array();
 
-let page = 1;
-let category = "ALL";
-let searchText = "";
+let 페이지이동버튼서비스 = {
+    첫페이지번호: 1,
+    마지막페이지번호: (productTotalCount) => (productTotalCount % 10 == 0) ? productTotalCount / 10 : Math.floor(productTotalCount / 10) + 1,
+    페이지번호생성: (nowPage) => {
+        let 페이지번호인덱스 = {
+            start: 0,
+            end: 0
+        }
 
+        페이지번호인덱스.start = nowPage % 5 == 0 ? nowPage - 4 : nowPage - (nowPage % 5) + 1;
+        페이지번호인덱스.end = 페이지번호인덱스.start + 4 <= this.마지막페이지번호 ? 페이지번호인덱스.start + 4 : this.마지막페이지번호;
 
-window.onload = () => {
-    getList();
+        return 페이지번호인덱스;
+    }
+
 }
 
-function getList() {
-    $.ajax({
-        async: false,
-        type: "get",
-        url: "/api/admin/products",
-        data: {
-            "pageNumber": page,
-            "category": category,
-            "searchText": searchText
-        },
-        dataType: "json",
-        success: (response) => {
-            console.log(response);
-            if(response.data.length != 0) {
-                loadPageNumberButtons(response.data[0].productTotalCount);
-                productDataList = response.data;
-                addProducts(productDataList);
-            }else {
-                alert("등록된 상품이 없습니다.");
-                location.reload();
-            }
-        },
-        error: (error) => {
-            console.log(error);
+let 상품리스트상단기능서비스 = {
+    페이지이동버튼생성: (nowPage, productTotalCount) => {
+        const pageButtons = document.querySelector(".page-buttons");
+
+        pageButtons.innerHTML = "";
+
+        let maxPage = 페이지이동버튼서비스.마지막페이지번호();
+        let startIndex = 페이지이동버튼서비스.페이지번호생성().start;
+        let endIndex = 페이지이동버튼서비스.페이지번호생성().end;
+
+        //////////////////////////////////////////여기서 시작
+
+        if(page != 1){
+            pageButtons.innerHTML = `<a href="javascript:void(0)"><li>&#60;</li></a>`;
         }
-    });
+        for(let i = startIndex; i <= endIndex; i++) {
+            if(i == page) {
+                pageButtons.innerHTML += `<a href="javascript:void(0)" class="a-selected"><li>${i}</li></a>`;
+            }else {
+                pageButtons.innerHTML += `<a href="javascript:void(0)"><li>${i}</li></a>`;
+            }
+
+        }
+        if(page != maxPage){
+            pageButtons.innerHTML += `<a href="javascript:void(0)"><li>&#62;</li></a>`;
+        }
+
+        const pageNumbers = pageButtons.querySelectorAll("li");
+
+        for(let i = 0; i < pageNumbers.length; i++) {
+            pageNumbers[i].onclick = () => {
+                let pageNumberText = pageNumbers[i].textContent;
+
+                if(pageNumberText == "<") {
+                    --page;
+                }else if(pageNumberText == ">") {
+                    ++page;
+                }else {
+                    page = pageNumberText;
+                }
+
+                getList();
+            }
+        }
+    }
+}
+
+let 상품리스트서비스 = {
+    상품리스트불러오기: () => {
+        const responseData = this.상품리스트데이터요청();
+        if(this.상품리스트데이터요청성공확인(responseData)) {
+            if(responseData.length > 0) {
+
+            }
+        }
+    },
+    상품리스트데이터요청성공확인: (responseData) => responseData != null,
+    상품리스트데이터요청: () => {
+        let responseData = null;
+
+        $.ajax({
+            async: false,
+            type: "get",
+            url: "/api/admin/products",
+            data: 상품리스트requestParams,
+            dataType: "json",
+            success: (response) => {
+                responseData = response.data;
+                console.log(response);
+
+                if(response.data.length != 0) {
+                    loadPageNumberButtons(response.data[0].productTotalCount);
+                    productDataList = response.data;
+                    addProducts(productDataList);
+                }else {
+                    alert("등록된 상품이 없습니다.");
+                    location.reload();
+                }
+            },
+            error: (error) => {
+                responseData = error.responseJSON;
+                console.log(error);
+            }
+        });
+
+        return responseData;
+    },
+
+
+}
+
+function 상품리스트데이터요청() {
+
 }
 
 categorySelectInput.onchange = () => {
@@ -64,57 +159,9 @@ searchButton.onclick = () => {
 }
 
 function loadPageNumberButtons(productTotalCount) {
-    const pageButtons = document.querySelector(".page-buttons");
 
-    pageButtons.innerHTML = "";
 
-    let maxPage = (productTotalCount % 10 == 0) ? productTotalCount / 10 : Math.floor(productTotalCount / 10) + 1;
-    let minPage = 1;
-
-    let startIndex = page % 5 == 0 ? page - 4 : page - (page % 5) + 1;
-    let endIndex = startIndex + 4 <= maxPage ? startIndex + 4 : maxPage;
-
-    console.log(`
-    totalCount = ${productTotalCount}
-    maxPage = ${maxPage}
-    startIndex = ${startIndex}
-    endIndex = ${endIndex}
-    `);
-
-    if(page != 1){
-        pageButtons.innerHTML = `<a href="javascript:void(0)"><li>&#60;</li></a>`;
-    }
-    for(let i = startIndex; i <= endIndex; i++) {
-        if(i == page) {
-            pageButtons.innerHTML += `<a href="javascript:void(0)" class="a-selected"><li>${i}</li></a>`;
-        }else {
-            pageButtons.innerHTML += `<a href="javascript:void(0)"><li>${i}</li></a>`;
-        }
-        
-    }
-    if(page != maxPage){
-        pageButtons.innerHTML += `<a href="javascript:void(0)"><li>&#62;</li></a>`;
-    }
-
-    const pageNumbers = pageButtons.querySelectorAll("li");
-
-    for(let i = 0; i < pageNumbers.length; i++) {
-        pageNumbers[i].onclick = () => {
-            let pageNumberText = pageNumbers[i].textContent;
-
-            if(pageNumberText == "<") {
-                --page;
-            }else if(pageNumberText == ">") {
-                ++page;
-            }else {
-                page = pageNumberText;
-            }
-
-            getList();
-        }
-    }
-
-}   
+}
 
 
 function addProducts(productList) {
@@ -123,7 +170,7 @@ function addProducts(productList) {
     listBody.innerHTML = "";
 
     productList.forEach((product, index) => {
-        
+
         listBody.innerHTML += `
         <tr>
             <td class="product-id">${product.id}</td>
@@ -136,7 +183,7 @@ function addProducts(productList) {
             <td><button type="button" class="list-button delete-button"><i class="fa-regular fa-trash-can"></i></button></td>
         </tr>
         <tr class="product-detail detail-invisible">
-            
+
         </tr>
         `;
     });
@@ -176,13 +223,13 @@ function addProducts(productList) {
                         }
                     }
                 });
-                
+
             }else{
                 if(confirm("수정을 취소하시겠습니까?")){
                     productDetails[index].classList.add("detail-invisible");
                     productDetails[index].innerHTML = "";
                 }
-            }            
+            }
         }
     });
 }
@@ -233,6 +280,7 @@ function getProductDetail(productDetail, index) {
                         </div>
                     </form>
                     <div class="product-images">
+
                     </div>
                 </td>
             </tr>
@@ -262,6 +310,15 @@ function loadImageList() {
         `;
     });
 
+    productFileImgList.forEach((img) => {
+        productImages.innerHTML += `
+            <div class="img-box">
+                <i class="fa-solid fa-xmark post-delete"></i>
+                <img class="product-img" src="${img}">
+            </div>
+        `;
+    });
+
     const preDeleteButton = document.querySelectorAll(".pre-delete");
     preDeleteButton.forEach((xbutton, index) => {
         xbutton.onclick = () => {
@@ -272,8 +329,6 @@ function loadImageList() {
         };
     })
 
-    
-
     const postDeleteButton = document.querySelectorAll(".post-delete");
     postDeleteButton.forEach((xbutton, index) => {
         xbutton.onclick = () => {
@@ -283,22 +338,13 @@ function loadImageList() {
             }
         };
     })
-    
-    productFileImgList.forEach((img) => {
-        productImages.innerHTML += `
-            <div class="img-box">
-                <i class="fa-solid fa-xmark post-delete"></i>
-                <img class="product-img" src="${img}">
-            </div>
-        `;
-    });
 }
 
 function addImageFile() {
     const fileAddButton = document.querySelector(".add-button");
     const fileInput = document.querySelector(".file-input");
 
-    
+
 
     fileAddButton.onclick = () => {
         fileInput.click();
@@ -314,7 +360,7 @@ function addImageFile() {
                 changeFlge = true;
             }
         });
-        
+
         if(changeFlge){
             getImageFiles(productImageFiles);
             fileInput.value = null;
@@ -330,10 +376,10 @@ function getImageFiles(productImageFiles) {
 
     productImageFiles.forEach((file, i) => {
         const reader = new FileReader();
-    
+
         reader.onload = (e) => {
             console.log("이미지 파일 하나를 리스트에 추가합니다.")
-            
+
             productFileImgList.push(e.target.result);
             console.log("index: " + i);
             if(i == productImageFiles.length - 1) {
@@ -344,5 +390,11 @@ function getImageFiles(productImageFiles) {
 
         setTimeout(() => {reader.readAsDataURL(file);}, i * 100);
     });
-    
+
+}
+
+
+
+window.onload = () => {
+    상품리스트데이터요청();
 }
