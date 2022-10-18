@@ -45,13 +45,13 @@ public class ProductApi {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<?> getProductList(@RequestParam int pageNumber,
+    public ResponseEntity<?> getProductList(@RequestParam int page,
                                             @RequestParam @Nullable String category,
                                             @RequestParam @Nullable String searchText) throws Exception {
 
 
 
-        return ResponseEntity.ok(new CMRespDto<>(1, "Successfully get product list", productService.getProductList(pageNumber, category, searchText)));
+        return ResponseEntity.ok(new CMRespDto<>(1, "Successfully get product list", productService.getProductList(page, category, searchText)));
     }
 
 
