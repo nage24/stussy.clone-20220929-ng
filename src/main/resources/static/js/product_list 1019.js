@@ -1,131 +1,45 @@
-const categorySelectInput = document.querySelector(".category-select .product-input");
-const searchInput = document.querySelector(".product-search .product-input");
-const searchButton = document.querySelector(".search-button"); 
+lass ProductListReqParams {
+    static #instance = null;
 
-let productRepository = {
-    상품관련리스트: new Array(),
-    clear상품관련리스트: function() {
-        this.상품관련리스트.forEach(list => {
-            while(list.length != 0) {
-                list.pop();
-            }
-        }); 
-    },
-    push상품관련리스트: function(list) {
-        this.상품관련리스트.push(list);
+    constructor(page, category, searchValue) {
+        this.page = page;
+        this.category = category;
+        this.searchValue = searchValue;
+    }
+
+    static getInstance() {
+        if(this.#instance == null) {
+            this.#instance = new ProductListReqParams(1, "ALL", "");
+        }
+        return this.#instance;
+    }
+
+    getPage() {return this.page;}
+    setPage(page) {this.page = page;}
+    getCategory() {return this.category;}
+    setCategory(category) {this.category = category;}
+    getSearchValue() {return this.searchValue;}
+    setSearchValue(searchValue) {this.searchValue = searchValue;}
+
+    getObject() {
+        return {
+            page: this.page,
+            category: this.category,
+            searchValue: this.searchValue
+        };
     }
 }
 
-let 상품리스트requestParams = {
-    page: 1,
-    category: "ALL",
-    searchText: ""
-}
+class ProductApi {
 
-let productDataList = null;
-let productImgList = null;
-let productFileImgList = new Array();
-let productImageFiles = new Array();
-
-let 페이지이동버튼서비스 = {
-    첫페이지번호: 1,
-    마지막페이지번호: (productTotalCount) => (productTotalCount % 10 == 0) ? productTotalCount / 10 : Math.floor(productTotalCount / 10) + 1,
-    페이지번호생성: function(nowPage) {
-        let 페이지번호인덱스 = {
-            start: 0,
-            end: 0
-        }
-
-        페이지번호인덱스.start = nowPage % 5 == 0 ? nowPage - 4 : nowPage - (nowPage % 5) + 1;
-        페이지번호인덱스.end = 페이지번호인덱스.start + 4 <= this.마지막페이지번호 ? 페이지번호인덱스.start + 4 : this.마지막페이지번호(productTotalCount);
-        
-        return 페이지번호인덱스;
-    }
-    
-}
-
-let 상품리스트상단기능서비스 = {
-    pageButtonsObj: () => document.querySelector(".page-buttons"),
-
-    이전페이지이동버튼생성: function(nowPage) {
-        if(nowPage != 1){
-            this.pageButtonsObj().innerHTML = `<a href="javascript:void(0)"><li>&#60;</li></a>`;
-        }
-    },
-
-    다음페이지이동버튼생성: function(nowPage, maxPage) {
-        if(nowPage != maxPage){
-            this.pageButtonsObj().innerHTML += `<a href="javascript:void(0)"><li>&#62;</li></a>`;
-        }
-    },
-
-    페이지이동버튼생성: function(nowPage, productTotalCount) {
-        const pageButtons = this.pageButtonsObj();
-
-        pageButtons.innerHTML = "";
-
-        let maxPage = 페이지이동버튼서비스.마지막페이지번호(productTotalCount);
-        let startIndex = 페이지이동버튼서비스.페이지번호생성().start;
-        let endIndex = 페이지이동버튼서비스.페이지번호생성().end;
-
-        this.이전페이지이동버튼생성(nowPage);
-
-        for(let i = startIndex; i <= endIndex; i++) {
-            if(i == nowPage) {
-                pageButtons.innerHTML += `<a href="javascript:void(0)" class="a-selected"><li>${i}</li></a>`;
-            }else {
-                pageButtons.innerHTML += `<a href="javascript:void(0)"><li>${i}</li></a>`;
-            }
-        }
-
-        this.다음페이지이동버튼생성(nowPage, maxPage);
-    },
-
-    페이지이동버튼이벤트등록: function() {
-        const pageNumbers = this.pageButtonsObj().querySelectorAll("li");
-
-        for(let i = 0; i < pageNumbers.length; i++) {
-            pageNumbers[i].onclick = () => {
-                let pageNumberText = pageNumbers[i].textContent;
-
-                if(pageNumberText == "<") {
-                    --상품리스트requestParams.page;
-                }else if(pageNumberText == ">") {
-                    ++상품리스트requestParams.page;
-                }else {
-                    상품리스트requestParams.page = pageNumberText;
-                }
-
-                상품리스트서비스.상품리스트불러오기();
-            }
-        }
-    }
-}
-
-let 상품리스트서비스 = {
-    상품리스트불러오기: function() {
-        const responseData = this.상품리스트데이터요청();
-        if(this.상품리스트데이터요청성공확인(responseData)) {
-            if(responseData.length > 0) {
-                상품리스트상단기능서비스.페이지이동버튼생성(상품리스트requestParams.page, responseData.productTotalCount);
-                상품리스트상단기능서비스.페이지이동버튼이벤트등록(상품리스트requestParams.page);
-                //상품 리스트 불러오기
-                상품리스트목록.master상품정보생성(responseData);
-            }else {
-                alert("등록된 상품이 없습니다.");
-                location.reload();
-            }
-        }
-    },
-    상품리스트데이터요청성공확인: (responseData) => responseData != null,
-    상품리스트데이터요청: () => {
+    productDataRequest() {
         let responseData = null;
 
         $.ajax({
             async: false,
             type: "get",
             url: "/api/admin/products",
-            data: 상품리스트requestParams,
+            data: ProductListReqParams.getInstance().getObject(),
             dataType: "json",
             success: (response) => {
                 responseData = response.data;
@@ -136,32 +50,156 @@ let 상품리스트서비스 = {
         });
 
         return responseData;
-    },
-
-
-}
-
-categorySelectInput.onchange = () => {
-    page = 1;
-    category = categorySelectInput.value;
-    getList();
-}
-
-searchInput.onkeyup = () => {
-    if(window.event.keyCode == 13) {
-        searchButton.click();
     }
 }
 
-searchButton.onclick = () => {
-    page = 1;
-    category = categorySelectInput.value;
-    searchText = searchInput.value;
-    getList();
+class ProductListService {
+    static #instance = null;
+
+    constructor() {
+        this.productApi = new ProductApi();
+        this.topOptionService = new TopOptionService();
+        this.loadProductList();
+    }
+
+    static getInstance() {
+        if(this.#instance == null) {
+            this.#instance = new ProductListService();
+        }
+        return this.#instance;
+    }
+
+    loadProductList() {
+        const responseData = this.productApi.productDataRequest();
+        if(this.isSuccessRequestStatus(responseData)) {
+            if(responseData.length > 0) {
+                this.topOptionService.loadPageMovement(responseData[0].productTotalCount);
+                ElementService.getInstance().createProductMst(responseData);
+            }
+        }
+    }
+
+    isSuccessRequestStatus(responseData) {
+        return responseData != null;
+    }
 }
 
-const 상품리스트목록 = {
-    master상품정보생성: function(responseData) {
+class TopOptionService {
+    constructor() {
+        this.pageMovement = new PageMovement();
+    }
+
+    loadPageMovement(productTotalCount) {
+        this.pageMovement.createMoveButtons(productTotalCount);
+        this.pageMovement.addEvent();
+    }
+
+    addOptioinsEvent() {
+        const categorySelectInput = document.querySelector(".category-select .product-input");
+        const searchInput = document.querySelector(".product-search .product-input");
+        const searchButton = document.querySelector(".search-button");
+
+        const productListReqParams = ProductListReqParams.getInstance();
+
+        categorySelectInput.onchange = () => {
+            productListReqParams.setPage(1);
+            productListReqParams.setCategory(categorySelectInput.value);
+            ProductListService.getInstance().loadProductList();
+        }
+
+        searchButton.onclick = () => {
+            productListReqParams.setPage(1);
+            productListReqParams.setCategory(categorySelectInput.value);
+            productListReqParams.setSearchValue(searchInput.value);
+            ProductListService.getInstance().loadProductList();
+        }
+
+        searchInput.onkeyup = () => {
+            if(window.event.keyCode == 13) {
+                searchButton.click();
+            }
+        }
+    }
+
+}
+
+class PageMovement {
+    pageButtons = document.querySelector(".page-buttons");
+
+    getEndPageNumber(productTotalCount) {
+        return (productTotalCount % 10 == 0) ? productTotalCount / 10 : Math.floor(productTotalCount / 10) + 1;
+    }
+
+    createMoveButtons(productTotalCount) {
+        let nowPage = ProductListReqParams.getInstance().getPage();
+
+        this.pageButtons.innerHTML = "";
+
+        this.createPreButton(nowPage);
+        this.createNumberButton(nowPage, productTotalCount);
+        this.createPostButton(nowPage, productTotalCount);
+    }
+
+    createNumberButton(nowPage, productTotalCount) {
+        let startIndex = nowPage % 5 == 0 ? nowPage - 4 : nowPage - (nowPage % 5) + 1;
+        let endIndex = startIndex + 4 <= this.getEndPageNumber(productTotalCount) ? startIndex + 4 : this.getEndPageNumber(productTotalCount);
+
+        for(let i = startIndex; i <= endIndex; i++) {
+            if(i == this.nowPage) {
+                this.pageButtons.innerHTML += `<a href="javascript:void(0)" class="a-selected"><li>${i}</li></a>`;
+            }else {
+                this.pageButtons.innerHTML += `<a href="javascript:void(0)"><li>${i}</li></a>`;
+            }
+        }
+    }
+
+    createPreButton(nowPage) {
+        if(nowPage != 1){
+            this.pageButtons.innerHTML = `<a href="javascript:void(0)"><li>&#60;</li></a>`;
+        }
+    }
+
+    createPostButton(nowPage, productTotalCount) {
+        let maxPage = this.getEndPageNumber(productTotalCount);
+        if(nowPage != maxPage){
+            this.pageButtons.innerHTML += `<a href="javascript:void(0)"><li>&#62;</li></a>`;
+        }
+    }
+
+    addEvent() {
+        const pageNumbers = this.pageButtons.querySelectorAll("li");
+        const productListReqParams = ProductListReqParams.getInstance();
+
+        for(let i = 0; i < pageNumbers.length; i++) {
+            pageNumbers[i].onclick = () => {
+                let pageNumberText = pageNumbers[i].textContent;
+
+                if(pageNumberText == "<") {
+                    productListReqParams.setPage(productListReqParams.getPage() - 1);
+                }else if(pageNumberText == ">") {
+                    productListReqParams.setPage(productListReqParams.getPage() + 1);
+                }else {
+                    productListReqParams.setPage(pageNumberText);
+                }
+
+                ProductListService.getInstance().loadProductList();
+            }
+        }
+    }
+}
+
+class ElementService {
+    static #instance = null;
+    #productDtl = null;
+
+    static getInstance() {
+        if(this.#instance == null) {
+            this.#instance = new ElementService();
+        }
+        return this.#instance;
+    }
+
+    createProductMst(responseData) {
         const listBody = document.querySelector(".list-body");
 
         listBody.innerHTML = "";
@@ -179,172 +217,208 @@ const 상품리스트목록 = {
                 <td><button type="button" class="list-button delete-button"><i class="fa-regular fa-trash-can"></i></button></td>
             </tr>
             <tr class="product-detail detail-invisible">
-                
+
             </tr>
             `;
         });
+
+        this.addProductMstEvent(responseData);
     }
-}
 
-function addProducts(productList) {
-    
+    addProductMstEvent(responseData) {
+        const detailButtons = document.querySelectorAll(".detail-button");
+        const productDetails = document.querySelectorAll(".product-detail");
 
-    const detailButtons = document.querySelectorAll(".detail-button");
-    const productDetails = document.querySelectorAll(".product-detail");
+        detailButtons.forEach((detailButton, index) => {
+            detailButton.onclick = () => {
+                this.#productDtl = responseData[index];
 
-    detailButtons.forEach((detailButton, index) => {
-        detailButton.onclick = () => {
+                if(productDetails[index].classList.contains("detail-invisible")) {
+                    let confirmationOfModification = false;
+                    let changeFlag = false;
 
-            if(productDetails[index].classList.contains("detail-invisible")) {
-                let confirmationOfModification = false;
-                let changeFlag = false;
-
-                productDetails.forEach((productDetail, index2) => {
-                    if(!productDetail.classList.contains("detail-invisible") && index2 != index){
-                        confirmationOfModification = true;
-                    }
-                });
-
-                productDetails.forEach((productDetail, index2) => {
-                    if(!productDetail.classList.contains("detail-invisible") && index2 != index){
-                        changeFlag = confirm("수정을 취소하시겠습니까?");
-                        if(changeFlag) {
-                            productDetail.classList.add("detail-invisible");
-                            productDetail.innerHTML = "";
-                            getProductDetail(productDetails[index], index);
-                            productDetails[index].classList.remove("detail-invisible");
+                    productDetails.forEach((productDetail, index2) => {
+                        if(!productDetail.classList.contains("detail-invisible") && index2 != index){
+                            confirmationOfModification = true;
                         }
-                    }else {
-                        if(confirmationOfModification && changeFlag) {
-                            getProductDetail(productDetails[index], index);
-                            productDetails[index].classList.remove("detail-invisible");
-                        }else if(!confirmationOfModification) {
-                            getProductDetail(productDetails[index], index);
-                            productDetails[index].classList.remove("detail-invisible");
+                    });
+
+                    productDetails.forEach((productDetail, index2) => {
+                        if(!productDetail.classList.contains("detail-invisible") && index2 != index){
+                            changeFlag = confirm("수정을 취소하시겠습니까?");
+                            if(changeFlag) {
+                                productDetail.classList.add("detail-invisible");
+                                productDetail.innerHTML = "";
+                                this.createProductDtl(productDetails[index]);
+                                productDetails[index].classList.remove("detail-invisible");
+                            }
+                        }else {
+                            if(confirmationOfModification && changeFlag) {
+                                this.createProductDtl(productDetails[index]);
+                                productDetails[index].classList.remove("detail-invisible");
+                            }else if(!confirmationOfModification) {
+                                this.createProductDtl(productDetails[index]);
+                                productDetails[index].classList.remove("detail-invisible");
+                            }
                         }
+                    });
+
+                }else{
+                    if(confirm("수정을 취소하시겠습니까?")){
+                        productDetails[index].classList.add("detail-invisible");
+                        productDetails[index].innerHTML = "";
                     }
-                });
-                
-            }else{
-                if(confirm("수정을 취소하시겠습니까?")){
-                    productDetails[index].classList.add("detail-invisible");
-                    productDetails[index].innerHTML = "";
                 }
-            }            
-        }
-    });
-}
+            }
+        });
+    }
 
-function getProductDetail(productDetail, index) {
-    productImgList = productDataList[index].productImgFiles;
+    createProductDtl(productDetail) {
+        // productImgList = productDataList[index].productImgFiles;
 
-    productDetail.innerHTML = `
-    <td colspan="8">
-        <table class="product-info">
-            <tr>
-                <td><input type="text" class="product-input" value="${productDataList[index].price}" placeholder="가격"></td>
-                <td><input type="text" class="product-input" value="${productDataList[index].color}" placeholder="색상"></td>
-                <td><input type="text" class="product-input" value="${productDataList[index].size}" placeholder="사이즈"></td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    <textarea class="product-input" placeholder="간략 설명">${productDataList[index].infoSimple}</textarea>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    <textarea class="product-input" placeholder="상세 설명">${productDataList[index].infoDetail}</textarea>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    <textarea class="product-input" placeholder="기타 설명">${productDataList[index].infoOption}</textarea>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    <textarea class="product-input" placeholder="관리 방법">${productDataList[index].infoManagement}</textarea>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    <textarea class="product-input" placeholder="배송 설명">${productDataList[index].infoShipping}</textarea>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    <form enctype="multipart/form-data">
-                        <div class="product-img-inputs">
-                            <label>상품 이미지</label>
-                            <button type="button" class="add-button">추가</button>
-                            <input type="file" class="file-input product-invisible" name="file" multiple>
+        productDetail.innerHTML = `
+        <td colspan="8">
+            <table class="product-info">
+                <tr>
+                    <td><input type="text" class="product-input" value="${this.#productDtl.price}" placeholder="가격"></td>
+                    <td><input type="text" class="product-input" value="${this.#productDtl.color}" placeholder="색상"></td>
+                    <td><input type="text" class="product-input" value="${this.#productDtl.size}" placeholder="사이즈"></td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <textarea class="product-input" placeholder="간략 설명">${this.#productDtl.infoSimple}</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <textarea class="product-input" placeholder="상세 설명">${this.#productDtl.infoDetail}</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <textarea class="product-input" placeholder="기타 설명">${this.#productDtl.infoOption}</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <textarea class="product-input" placeholder="관리 방법">${this.#productDtl.infoManagement}</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <textarea class="product-input" placeholder="배송 설명">${this.#productDtl.infoShipping}</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <form enctype="multipart/form-data">
+                            <div class="product-img-inputs">
+                                <label>상품 이미지</label>
+                                <button type="button" class="add-button">추가</button>
+                                <input type="file" class="file-input product-invisible" name="file" multiple>
+                            </div>
+                        </form>
+                        <div class="product-images">
+
                         </div>
-                    </form>
-                    <div class="product-images">
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    <button type="button" class="black-button update-button">수정하기</button>
-                </td>
-            </tr>
-        </table>
-    </td>
-    `;
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <button type="button" class="black-button update-button">수정하기</button>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        `;
 
-    loadImageList();
-    addImageFile();
+        // loadImageList();
+        // addImageFile();
+        const productRepository = new ProductRepository(this.#productDtl);
+		this.createImgFileService = new ProductImgFileService(productRepository);
+        this.createProductDtlImgs(productRepository);
+		productImgFileService.addImageFileEvent();
+
+    }
+
+    createProductDtlImgs(productRepository) {
+
+        const productImages = document.querySelector(".product-images");
+        productImages.innerHTML = "";
+
+        productRepository.oldImgList.forEach(img => {
+            productImages.innerHTML += `
+                <div class="img-box">
+                    <i class="fa-solid fa-xmark pre-delete"></i>
+                    <img class="product-img" src="/image/product/${img.temp_name}">
+                </div>
+            `;
+        });
+
+        productRepository.newImgList.forEach((img) => {
+            productImages.innerHTML += `
+                <div class="img-box">
+                    <i class="fa-solid fa-xmark post-delete"></i>
+                    <img class="product-img" src="${img}">
+                </div>
+            `;
+        });
+
+        this.addProductImgDeleteEvent(productRepository);
+    }
+
+    addProductImgDeleteEvent(productRepository) {
+        const preDeleteButton = document.querySelectorAll(".pre-delete");
+        preDeleteButton.forEach((xbutton, index) => {
+            xbutton.onclick = () => {
+                if(confirm("상품 이미지를 지우시겠습니까?")) {
+                    productRepository.oldImgList.splice(index, 1);
+                    this.createProductDtlImgs(productRepository);
+                }
+            };
+        })
+
+        const postDeleteButton = document.querySelectorAll(".post-delete");
+        postDeleteButton.forEach((xbutton, index) => {
+            xbutton.onclick = () => {
+                if(confirm("상품 이미지를 지우시겠습니까?")) {
+                    productRepository.newImgList.splice(index, 1);
+                    this.createProductDtlImgs(productRepository);
+                }
+            };
+        })
+    }
+
 }
 
-function loadImageList() {
-    const productImages = document.querySelector(".product-images");
-    productImages.innerHTML = "";
+class ProductRepository {
+    oldImgList;
+    oldImgDeleteList;
+    newImgList;
+    newImgFormData;
 
-    productImgList.forEach(img => {
-        productImages.innerHTML += `
-            <div class="img-box">
-                <i class="fa-solid fa-xmark pre-delete"></i>
-                <img class="product-img" src="/image/product/${img.temp_name}">
-            </div>
-        `;
-    });
+    constructor(productDtl) {
+        this.oldImgList = productDtl.productImgFiles;
+        this.oldImgDeleteList = new Array();
+        this.newImgList = new Array();
+        this.newImgFormData = new FormData();
+    }
 
-    productFileImgList.forEach((img) => {
-        productImages.innerHTML += `
-            <div class="img-box">
-                <i class="fa-solid fa-xmark post-delete"></i>
-                <img class="product-img" src="${img}">
-            </div>
-        `;
-    });
-
-    const preDeleteButton = document.querySelectorAll(".pre-delete");
-    preDeleteButton.forEach((xbutton, index) => {
-        xbutton.onclick = () => {
-            if(confirm("상품 이미지를 지우시겠습니까?")) {
-                productImgList.splice(index, 1);
-                loadImageList()
-            }
-        };
-    })
-
-    const postDeleteButton = document.querySelectorAll(".post-delete");
-    postDeleteButton.forEach((xbutton, index) => {
-        xbutton.onclick = () => {
-            if(confirm("상품 이미지를 지우시겠습니까?")) {
-                productFileImgList.splice(index, 1);
-                loadImageList()
-            }
-        };
-    })
 }
 
-function addImageFile() {
+
+class ProductImgFileService {
+
+	productRepository = null;
+	constructor(productRepository) {
+		this.productRepository = productRepository;
+	}
+
+
+
+	addImageFileEvent() {
     const fileAddButton = document.querySelector(".add-button");
     const fileInput = document.querySelector(".file-input");
-
-    
 
     fileAddButton.onclick = () => {
         fileInput.click();
@@ -356,33 +430,36 @@ function addImageFile() {
 
         formData.forEach((value) => {
             if(value.size != 0) {
-                productImageFiles.push(value);
+                this.productRepository.newImgList.push(value);
                 changeFlge = true;
             }
         });
-        
+
         if(changeFlge){
-            getImageFiles(productImageFiles);
+            getImageFiles();
             fileInput.value = null;
         }
     }
-}
 
-function getImageFiles(productImageFiles) {
 
-    while(productFileImgList.length != 0) {
-        productFileImgList.pop();
+
+	getImageFiles() {
+
+	const newImgList = this.productRepository.newImgList;
+
+    while(newImgList.length != 0) {
+        newImgList.pop();
     }
 
-    productImageFiles.forEach((file, i) => {
+    newImgList.forEach((file, i) => {
         const reader = new FileReader();
-    
+
         reader.onload = (e) => {
             console.log("이미지 파일 하나를 리스트에 추가합니다.")
-            
-            productFileImgList.push(e.target.result);
+
+            newImgList.push(e.target.result);
             console.log("index: " + i);
-            if(i == productImageFiles.length - 1) {
+            if(i == newImgList.length - 1) {
                 console.log("마지막 인덱스일 때만 실행")
                 loadImageList();
             }
@@ -390,11 +467,10 @@ function getImageFiles(productImageFiles) {
 
         setTimeout(() => {reader.readAsDataURL(file);}, i * 100);
     });
-    
 }
 
 
 
-window.onload = () => { // page 가 열렸을 때 호출됨. 
-    상품리스트서비스.상품리스트불러오기();
+window.onload = () => {
+    new ProductListService();
 }
