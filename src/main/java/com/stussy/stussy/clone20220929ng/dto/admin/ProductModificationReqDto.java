@@ -29,5 +29,6 @@ public class ProductModificationReqDto {
     private String infoOption;
     private String infoManagement;
     private String infoShipping;
+    private List<String> deleteImgFiles;
     private List<MultipartFile> files;
 }
