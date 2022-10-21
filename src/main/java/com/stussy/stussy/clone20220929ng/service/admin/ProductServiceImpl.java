@@ -135,6 +135,8 @@ public class ProductServiceImpl implements ProductService{
     }
 
     private boolean insertProductImg(List<MultipartFile> files, int productId) throws Exception { // insert
+
+
         List<ProductImgFile> productImgFiles = getProductImgFiles(files, productId);
 
         return productRepository.saveImgFiles(productImgFiles) > 0;
@@ -150,7 +152,7 @@ public class ProductServiceImpl implements ProductService{
 
         int result = productRepository.deleteImgFiles(map);
         if (result != 0) {
-            int deleteSuccessCount = 0;
+
 
             deleteImgFiles.forEach(temp_name -> {
                 Path uploadPath = Paths.get(filePath + "/product/" + temp_name);

@@ -64,14 +64,14 @@ public class ProductApi {
         // DB 로 전달 . . . -> update delete insert
 
 
-        return ResponseEntity.ok(new CMRespDto<>(1, "Successfully", productService.updateProduct(productModificationReqDto)));
+        return ResponseEntity.ok(new CMRespDto<>(1, "Successfully Update", productService.updateProduct(productModificationReqDto)));
     }
 
 
     @DeleteMapping("/product/{productId}")
-    public ResponseEntity<?> deleteProduct(int productId) throws Exception {
+    public ResponseEntity<?> deleteProduct(@PathVariable int productId) throws Exception {
 
-        return ResponseEntity.ok(new CMRespDto<>(1, "Successfully Delete", true));
+        return ResponseEntity.ok(new CMRespDto<>(1, "Successfully Delete", productService.deleteProduct(productId)));
     }
 
 

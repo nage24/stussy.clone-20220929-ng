@@ -42,7 +42,6 @@ class ProductApi {
             data: ProductListReqParams.getInstance().getObject(),
             dataType: "json",
             success: (response) => {
-                console.log("productDataRequest Success");
                 responseData = response.data;
             },
             error: (error) => {
@@ -64,37 +63,32 @@ class ProductApi {
             data: formData,
             dataType: "json",
             success: (response) => {
-                console.log("productDataUpdateRequest Success");
                 alert("상품 수정 완료");
                 location.reload();
             },
             error: (error) => {
-                alert("상품 등록 실패");
+                alert("상품 수정 실패");
                 console.log(error);
             }
         });
     }
 
-
-    productDeleteRequest(productId) { // pathVariable
+    productDataDeleteRequest(productId) {
         $.ajax({
             async: false,
             type: "delete",
             url: "/api/admin/product/" + productId,
             dataType: "json",
             success: (response) => {
-                console.log("productDeleteRequest Success");
-                alert("상품 삭제 완료");
+                alert("상품 삭제 완료!");
+                location.reload();
             },
             error: (error) => {
+                alert("상품 삭제 실패!");
                 console.log(error);
             }
         });
-
-
     }
-
-
 }
 
 class ProductListService {
@@ -127,7 +121,7 @@ class ProductListService {
         return responseData != null;
     }
 
-    updateProduct(productRepository) {
+    updatePoduct(productRepository) {
         this.productApi.productDataUpdateRequest(productRepository.updateFormData);
     }
 }
@@ -322,15 +316,13 @@ class ElementService {
             }
         });
 
-        deleteButtons.forEach((deleteButton) => {
+        deleteButtons.forEach((deleteButton, index) => {
             deleteButton.onclick = () => {
-                if(confirm("상품을 삭제하시겠습니까?")) {
+                if(confirm("상품을 삭제하시겠습니까?")){
                     const productApi = new ProductApi();
-                    productApi.productDeleteRequest(responseData[index].id);
+                    productApi.productDataDeleteRequest(responseData[index].id);
                 }
             }
-
-
         });
     }
 
@@ -456,7 +448,7 @@ class ElementService {
 
         updateButton.onclick = () => {
             productRepository.toUpdateFormData(this.#productDtl.id);
-            ProductListService.getInstance().updateProduct(productRepository);
+            ProductListService.getInstance().updatePoduct(productRepository);
         }
     }
 }

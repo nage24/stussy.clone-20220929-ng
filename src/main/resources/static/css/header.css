@@ -10,9 +10,8 @@ header {
     width: 100%;
     height: 60px;
 
-    background-color: white;
+    background-color: #ffffff;
 }
-
 
 .header-flex {
     display: flex;
@@ -40,8 +39,7 @@ header {
 }
 
 .site-logo {
-    width: 94%;
-    margin-top: 10px;
+    width: 100%;
 }
 
 .menu-container {
@@ -72,7 +70,6 @@ header {
 
     font-weight: 400;
 }
-
 .site-header-button:active{
     animation: none;
 }
@@ -111,7 +108,7 @@ nav {
 
 .site-nav-child-link {
     margin-bottom: 10px;
-    width: 85px;
+    width: 100px;
 }
 
 .nav-invisible {

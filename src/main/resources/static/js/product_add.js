@@ -10,19 +10,17 @@ fileAddButton.onclick = () => {
 
 fileInput.onchange = () => {
     const formData = new FormData(document.querySelector("form"));
-    let changeFlge
+    let changeFlge = false;
 
     formData.forEach((value) => {
         if(value.size != 0) {
             productImageFiles.push(value);
-            console.log(productImageFiles);
-
-            changeFlge = true; // 반복이 계속 도는 경우 발생; -> changeFlag 가 일어났을 때 , 
+            changeFlge = true;
         }
     });
 
     if(changeFlge){
-        getImagePreview();  // 이미지를 로드해주겠다. 
+        getImagePreview();
         fileInput.value = null;
     }
 }
@@ -56,15 +54,14 @@ function getImagePreview() {
             })
         }
 
-        setTimeout(() => reader.readAsDataURL(file), i * 100);
+        setTimeout(() => {reader.readAsDataURL(file)}, i * 100);
     });
 }
-
 
 submitButton.onclick = () => {
     const productInputs = document.querySelectorAll(".product-input");
 
-    let formData = new FormData(); // formdata 생성 하여 값들을 form 에 차곡차곡 담아서 보내 줄 것
+    let formData = new FormData();
 
     formData.append("category", productInputs[0].value);
     formData.append("name", productInputs[1].value);
@@ -77,27 +74,23 @@ submitButton.onclick = () => {
     formData.append("infoManagement", productInputs[8].value);
     formData.append("infoShipping", productInputs[9].value);
 
-    // formData 는 같은 key 값으로 계속 append 시키면 ->  Array 로 들어가게 됨
-
     productImageFiles.forEach((file) => {
         formData.append("files", file);
-    });    
+    });
 
     request(formData);
 }
 
 function request(formData) {
-
     $.ajax({
         async: false,
-        type: "post", 
+        type: "post",
         url: "/api/admin/product",
-        
         enctype: "multipart/form-data",
-        contentType: false, 
+        contentType: false,
         processData: false,
         data: formData,
-        dataType: "json", 
+        dataType: "json",
         success: (response) => {
             alert("상품 등록 완료");
             location.replace("/admin/products");
@@ -107,6 +100,4 @@ function request(formData) {
             console.log(error);
         }
     });
-
-
 }
