@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:javascript="http://www.w3.org/1999/xhtml">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,6 +14,7 @@
 </head>
 <body>
 <div id="container">
+
     <header>
         <div class="header-container">
             <div class="header-flex">
@@ -60,9 +61,6 @@
         <script src="/static/js/header.js"></script>
     </header>
 
-
-
-
     <main>
         <div class="admin">
             <h1 class="admin-title">ADMIN PRODUCT LIST</h1>
@@ -97,23 +95,23 @@
                         </div>
                     </div>
                     <ul class="page-buttons">
-                        
+
                     </ul>
                     <table class="product-list">
                         <thead>
-                            <tr>
-                                <th>상품번호</th>
-                                <th>상품종류</th>
-                                <th>상품명</th>
-                                <th>가격</th>
-                                <th>색상</th>
-                                <th>사이즈</th>
-                                <th>상세</th>
-                                <th>삭제</th>
-                            </tr>
+                        <tr>
+                            <th>상품번호</th>
+                            <th>상품종류</th>
+                            <th>상품명</th>
+                            <th>가격</th>
+                            <th>색상</th>
+                            <th>사이즈</th>
+                            <th>상세</th>
+                            <th>삭제</th>
+                        </tr>
                         </thead>
                         <tbody class="list-body">
-                            
+
                         </tbody>
                     </table>
                 </section>
@@ -122,12 +120,9 @@
     </main>
 
 
-
-
-
-    
     <footer>
     </footer>
+
 </div>
 <script src="/static/js/product_list.js"></script>
 </body>

@@ -56,7 +56,7 @@ function getImagePreview() {
             })
         }
 
-        setTimeout(reader.readAsDataURL(file), i * 100);
+        setTimeout(() => reader.readAsDataURL(file), i * 100);
     });
 }
 
@@ -100,6 +100,7 @@ function request(formData) {
         dataType: "json", 
         success: (response) => {
             alert("상품 등록 완료");
+            location.replace("/admin/products");
         },
         error: (error) => {
             alert("상품 등록 실패");

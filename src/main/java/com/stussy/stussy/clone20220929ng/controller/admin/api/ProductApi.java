@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Null;
 
 @RequestMapping("/api/admin")
@@ -29,20 +30,20 @@ public class ProductApi {
     @PostMapping("/product")
     public ResponseEntity<?> addProduct(@Validated(ValidationSequence.class) ProductAdditionReqDto productAdditionReqDto, BindingResult bindingResult) throws  Exception {
 
-        String productName = productAdditionReqDto.getName();
-        for(int i = 0; i < 20; i++) {
-            if(i % 4 == 0){
-                productAdditionReqDto.setName(productName + "-" + (i + 1));
-            }
-            productService.addProduct(productAdditionReqDto);
-        }
-        return ResponseEntity
-                .created(null)
-                .body(new CMRespDto<>(1, "Successfully", null));
-
+//        String productName = productAdditionReqDto.getName();
+//        for(int i = 0; i < 20; i++) {
+//            if(i % 4 == 0){
+//                productAdditionReqDto.setName(productName + "-" + (i + 1));
+//            }
+//            productService.addProduct(productAdditionReqDto);
+//        }
 //        return ResponseEntity
 //                .created(null)
-//                .body(new CMRespDto<>(1, "Successfully added", productService.addProduct(productAdditionReqDto)));
+//                .body(new CMRespDto<>(1, "Successfully", null));
+
+        return ResponseEntity
+                .created(null)
+                .body(new CMRespDto<>(1, "Successfully added", productService.addProduct(productAdditionReqDto)));
     }
 
     @GetMapping("/products")
@@ -56,14 +57,22 @@ public class ProductApi {
     }
 
     @LogAspect
-    //@ValidAspect
+    @ValidAspect
     @PostMapping("/product/modification")
-    public ResponseEntity<?> updateProduct(ProductModificationReqDto productModificationReqDto) throws Exception {
+    public ResponseEntity<?> updateProduct(@Valid ProductModificationReqDto productModificationReqDto, BindingResult bindingResult) throws Exception {
+
+        // DB 로 전달 . . . -> update delete insert
 
 
-        return ResponseEntity.ok(new CMRespDto<>(1, "Successfully", true));
+        return ResponseEntity.ok(new CMRespDto<>(1, "Successfully", productService.updateProduct(productModificationReqDto)));
     }
 
+
+    @DeleteMapping("/product/{productId}")
+    public ResponseEntity<?> deleteProduct(int productId) throws Exception {
+
+        return ResponseEntity.ok(new CMRespDto<>(1, "Successfully Delete", true));
+    }
 
 
 }

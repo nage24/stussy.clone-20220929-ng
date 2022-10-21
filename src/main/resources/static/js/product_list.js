@@ -42,6 +42,7 @@ class ProductApi {
             data: ProductListReqParams.getInstance().getObject(),
             dataType: "json",
             success: (response) => {
+                console.log("productDataRequest Success");
                 responseData = response.data;
             },
             error: (error) => {
@@ -63,6 +64,7 @@ class ProductApi {
             data: formData,
             dataType: "json",
             success: (response) => {
+                console.log("productDataUpdateRequest Success");
                 alert("상품 수정 완료");
                 location.reload();
             },
@@ -72,6 +74,27 @@ class ProductApi {
             }
         });
     }
+
+
+    productDeleteRequest(productId) { // pathVariable
+        $.ajax({
+            async: false,
+            type: "delete",
+            url: "/api/admin/product/" + productId,
+            dataType: "json",
+            success: (response) => {
+                console.log("productDeleteRequest Success");
+                alert("상품 삭제 완료");
+            },
+            error: (error) => {
+                console.log(error);
+            }
+        });
+
+
+    }
+
+
 }
 
 class ProductListService {
@@ -104,7 +127,7 @@ class ProductListService {
         return responseData != null;
     }
 
-    updatePoduct(productRepository) {
+    updateProduct(productRepository) {
         this.productApi.productDataUpdateRequest(productRepository.updateFormData);
     }
 }
@@ -115,11 +138,12 @@ class TopOptionService {
     }
 
     loadPageMovement(productTotalCount) {
+        this.addOptionsEvent();
         this.pageMovement.createMoveButtons(productTotalCount);
         this.pageMovement.addEvent();
     }
 
-    addOptioinsEvent() {
+    addOptionsEvent() {
         const categorySelectInput = document.querySelector(".category-select .product-input");
         const searchInput = document.querySelector(".product-search .product-input");
         const searchButton = document.querySelector(".search-button");
@@ -200,9 +224,9 @@ class PageMovement {
                 let pageNumberText = pageNumbers[i].textContent;
 
                 if(pageNumberText == "<") {
-                    productListReqParams.setPage(productListReqParams.getPage() - 1);
+                    productListReqParams.setPage(Number(productListReqParams.getPage()) - 1);
                 }else if(pageNumberText == ">") {
-                    productListReqParams.setPage(productListReqParams.getPage() + 1);
+                    productListReqParams.setPage(Number(productListReqParams.getPage()) + 1);
                 }else {
                     productListReqParams.setPage(pageNumberText);
                 }
@@ -252,6 +276,7 @@ class ElementService {
 
     addProductMstEvent(responseData) {
         const detailButtons = document.querySelectorAll(".detail-button");
+        const deleteButtons = document.querySelectorAll(".delete-button");
         const productDetails = document.querySelectorAll(".product-detail");
 
         detailButtons.forEach((detailButton, index) => {
@@ -295,6 +320,17 @@ class ElementService {
                     }
                 }
             }
+        });
+
+        deleteButtons.forEach((deleteButton) => {
+            deleteButton.onclick = () => {
+                if(confirm("상품을 삭제하시겠습니까?")) {
+                    const productApi = new ProductApi();
+                    productApi.productDeleteRequest(responseData[index].id);
+                }
+            }
+
+
         });
     }
 
@@ -420,7 +456,7 @@ class ElementService {
 
         updateButton.onclick = () => {
             productRepository.toUpdateFormData(this.#productDtl.id);
-            ProductListService.getInstance().updatePoduct(productRepository);
+            ProductListService.getInstance().updateProduct(productRepository);
         }
     }
 }
@@ -502,7 +538,7 @@ class ProductImgFileService {
     }
 
     getImageFiles() {
-        const newImgList = this.productRepository.newImgList;
+        const newImgeList = this.productRepository.newImgList;
 
         while(this.productRepository.newImgSrcList.length != 0) {
             this.productRepository.newImgSrcList.pop();

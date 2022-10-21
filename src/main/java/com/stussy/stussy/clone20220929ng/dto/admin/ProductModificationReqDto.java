@@ -1,6 +1,8 @@
 package com.stussy.stussy.clone20220929ng.dto.admin;
 
+import com.stussy.stussy.clone20220929ng.domain.Product;
 import com.stussy.stussy.clone20220929ng.dto.validation.ValidationGroups;
+import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Max;
@@ -8,6 +10,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
+@Data
 public class ProductModificationReqDto {
 
     @Min(value = 0, message = "상품 코드는 음수일 수 없습니다")
@@ -31,4 +34,21 @@ public class ProductModificationReqDto {
     private String infoShipping;
     private List<String> deleteImgFiles;
     private List<MultipartFile> files;
+
+
+    public Product toProductEntity() {
+        return Product.builder()
+                .id(id)
+                .price(price)
+                .color(color)
+                .size(size)
+                .info_simple(infoSimple)
+                .info_detail(infoDetail)
+                .info_option(infoOption)
+                .info_management(infoManagement)
+                .info_shipping(infoShipping)
+                .build();
+
+
+    }
 }

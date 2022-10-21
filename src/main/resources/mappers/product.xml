@@ -118,12 +118,10 @@
                 <!-- if-else 문 -> choose; when : if / otherwise : else ; 추가 옵션 -->
                 AND category =  #{category}
             </if>
-            <if test='searchText != NULL || searchText != ""'>
+            <if test='searchText != null || searchText != ""'>
                 AND name like CONCAT('%', #{searchText} , '%') <!-- 표현식 사용 -->
             </if>
-
             LIMIT #{index}, 10) pm
-
             left outer join product_img pim ON(pim.product_id = pm.id)
             left outer join (
                             select
@@ -136,15 +134,67 @@
                                 <!-- if-else 문 -> choose; when : if / otherwise : else ; 추가 옵션 -->
                                 AND category =  #{category}
                             </if>
-                            <if test='searchText != NULL || searchText != ""'>
+                            <if test='searchText != null || searchText != ""'>
                                 AND name like CONCAT('%', #{searchText} , '%') <!-- 표현식 사용 -->
                             </if>
                             ) pc on(1=1)
-
         <!-- 상품 없을 때 설정 필요. -->
+    </select>
+
+    <update id="setProduct" parameterType="com.stussy.stussy.clone20220929ng.domain.Product">
+        update
+            product_mst
+        set
+            price = #{price},
+            color = #{color},
+            size = #{size},
+            info_simple = #{info_simple},
+            info_detail = #{info_detail},
+            info_management = #{info_management},
+            info_shipping = #{info_shipping},
+            update_date = now()
+        where
+            id = #{id}
+
+    </update>
+
+
+    <delete id="deleteImgFiles" parameterType="hashMap">
+        delete
+        from
+            product_img
+        where
+            product_id = #{productId}
+        and temp_name in (
+            <foreach collection="list" item="temp_name" open="(" separator="," close=")">
+
+                #{temp_name}
+
+            </foreach>
+        ) <!-- 이 컬럼에 값이 존재 하면 . . . -->
+
+    </delete>
+
+
+    <select id="getProductImgList" parameterType="Integer" resultMap="product_img_files">
+        select
+            *
+        from
+            product_img
+        where
+            product_id = #{productId}
+
 
     </select>
 
+    <delete id="deleteProduct" parameterType="Integer">
+        delete
+        from
+            product_mst
+        where
+            id = #{productId}
+
+    </delete>
 
 
 </mapper>
