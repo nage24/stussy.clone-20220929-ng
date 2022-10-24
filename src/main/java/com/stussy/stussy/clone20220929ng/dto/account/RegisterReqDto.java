@@ -1,7 +1,7 @@
 package com.stussy.stussy.clone20220929ng.dto.account;
 
 import com.stussy.stussy.clone20220929ng.domain.User;
-import com.stussy.stussy.clone20220929ng.dto.validation.ValidationGroups;
+import com.stussy.stussy.clone20220929ng.validation.validation.ValidationGroups;
 import lombok.Data;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 

@@ -4,20 +4,14 @@ import com.stussy.stussy.clone20220929ng.aop.annotation.LogAspect;
 import com.stussy.stussy.clone20220929ng.aop.annotation.ValidAspect;
 import com.stussy.stussy.clone20220929ng.dto.CMRespDto;
 import com.stussy.stussy.clone20220929ng.dto.account.RegisterReqDto;
-import com.stussy.stussy.clone20220929ng.dto.validation.ValidationSequence;
+import com.stussy.stussy.clone20220929ng.validation.validation.ValidationSequence;
 import com.stussy.stussy.clone20220929ng.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StopWatch;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 @RequestMapping("/api/account")

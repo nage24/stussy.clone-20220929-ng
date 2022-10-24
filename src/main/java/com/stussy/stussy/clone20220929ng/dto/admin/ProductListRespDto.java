@@ -3,14 +3,12 @@ package com.stussy.stussy.clone20220929ng.dto.admin;
 import com.stussy.stussy.clone20220929ng.domain.ProductImgFile;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @Builder
-public class ProductListRespDto {
+public class ProductListRespDto{
 
     private int id;
     private String category;

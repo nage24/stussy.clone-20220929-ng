@@ -1,6 +1,4 @@
-package com.stussy.stussy.clone20220929ng.dto.validation;
-
-import com.fasterxml.jackson.databind.ser.std.StdKeySerializers;
+package com.stussy.stussy.clone20220929ng.validation.validation;
 
 import javax.validation.GroupSequence;
 import javax.validation.groups.Default;

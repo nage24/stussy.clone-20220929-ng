@@ -1,7 +1,7 @@
 package com.stussy.stussy.clone20220929ng.domain;
 
 import com.stussy.stussy.clone20220929ng.dto.admin.ProductListRespDto;
-import com.stussy.stussy.clone20220929ng.dto.validation.ValidationGroups;
+import com.stussy.stussy.clone20220929ng.dto.shop.CollectionListRespDto;
 import lombok.*;
 
 import java.time.LocalDateTime;

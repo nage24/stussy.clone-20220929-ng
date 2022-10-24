@@ -1,4 +1,4 @@
-package com.stussy.stussy.clone20220929ng.dto.validation;
+package com.stussy.stussy.clone20220929ng.validation.validation;
 
 // 이너클래스
 public interface ValidationGroups {
