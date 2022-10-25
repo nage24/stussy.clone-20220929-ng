@@ -54,12 +54,6 @@ public class ProductApi {
         return ResponseEntity.ok(new CMRespDto<>(1, "Successfully get product list", productService.getProductList(page, category, searchValue)));
     }
 
-
-    @GetMapping("products/{groupId}")
-    public ResponseEntity<?> getProduct(@PathVariable int groupId) {
-        return ResponseEntity.ok(new CMRespDto<>(1, "Successfully get Product", null));
-    }
-
     @LogAspect
     @ValidAspect
     @PostMapping("/product/modification")

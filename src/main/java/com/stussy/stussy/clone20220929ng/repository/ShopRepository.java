@@ -11,5 +11,6 @@ import java.util.Map;
 public interface ShopRepository {
 
     public List<CollectionProduct> getCollectionList(Map<String, Object> map) throws Exception;
+    // public List<Product> getProduct(Map<Object, Object> map) throws Exception;
 
 }
