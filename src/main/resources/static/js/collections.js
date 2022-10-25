@@ -3,7 +3,7 @@ class CollectionReqParam {
     #page = 0;
 
     constructor() {
-        this.page = 1
+        this.#page = 1
     }
 
     static getInstance() {
@@ -18,7 +18,7 @@ class CollectionReqParam {
 
     getObject() {
         return {
-            page: this.page
+            page: this.#page
         }
     }
 }
@@ -83,9 +83,38 @@ class CollectionsService {
                 </li>
             `;
         });
+
+        this.addProductClickEvent(responseData);
+        this.addScrollEvent();
+
     }
 
     addScrollEvent() {
+        const body = document.querySelector("body");
+        const html = document.querySelector("html");
+
+        body.onscroll = () => {
+                let scrollStatus = body.offsetHeight - html.clientHeight - html.scrollTop;
+                if(scrollStatus > -1 && scrollStatus < 30) {
+                        CollectionReqParam.getInstance().setPage(Number(CollectionReqParam.getInstance().getPage()) + 1);
+                        CollectionsService.getInstance().loadCollections();
+                }
+
+                // console.log("문서 높이: " + body.offsetHeight)
+                // console.log("html 높이: " + html.clientHeight);
+                // console.log("스크롤 탑: " + body.scrollTop);
+
+            }
+    }
+
+
+    addProductClickEvent() {
+        const products = document.querySelectorAll(".collection-product");
+        products.forEach/((product, index) => {
+                products.onclick = () => {
+                    location.href = "/products/${responseData[index].id}";
+                }
+        });
 
     }
 }
