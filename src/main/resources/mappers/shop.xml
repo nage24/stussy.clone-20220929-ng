@@ -5,6 +5,28 @@
 
 <mapper namespace="com.stussy.stussy.clone20220929ng.repository.ShopRepository">
 
+    <resultMap id="product_img_files" type="com.stussy.stussy.clone20220929ng.domain.ProductImgFile">
+        <result property="id" column="file_id"></result>
+        <result property="origin_name" column="origin_name"></result>
+        <result property="temp_name" column="temp_name"></result>
+    </resultMap>
+
+    <resultMap id="product_details" type="com.stussy.stussy.clone20220929ng.domain.ProductDetail">
+        <result property="group_id" column="group_id"></result>
+        <result property="name" column="name"></result>
+        <result property="price" column="price"></result>
+        <result property="color" column="color"></result>
+        <result property="size" column="size"></result>
+
+        <result property="info_simple" column="info_simple"></result>
+        <result property="info_detail" column="info_detail"></result>
+        <result property="info_option" column="info_option"></result>
+        <result property="info_management" column="info_management"></result>
+        <result property="info_shipping" column="info_shipping"></result>
+
+        <collection property="productImgFiles" javaType="list" resultMap="product_img_files"></collection>
+    </resultMap>
+
     <select id="getCollectionList"
             parameterType="hashmap"
             resultType="com.stussy.stussy.clone20220929ng.domain.CollectionProduct">
@@ -30,7 +52,7 @@
                             where
                                 1 = 1
                                 <if test='category != "all"'>
-                                    and pm.category = #{category}
+                                    and category = #{category}
                                 </if>
                             GROUP by
                                 group_id) cnt) pc ON(1 = 1)
@@ -45,13 +67,19 @@
     </select>
 
 
-    <select id="getProduct" parameterType="Integer" resultType="com.stussy.stussy.clone20220929ng.domain.CollectionProduct">
+    <select id="getProduct" parameterType="Integer" resultMap="product_details">
         SELECT
                 pm.group_id,
                 pm.name,
                 pm.price,
                 pm.color,
                 pm.size,
+                pm.info_simple,
+                pm.info_detail,
+                pm.info_option,
+                pm.info_management,
+                pm.info_shipping,
+                pim.id as file_id,
                 pim.temp_name
         FROM
                 product_mst pm
@@ -60,10 +88,10 @@
                                                             from
                                                                     product_mst
                                                             where
-                                                                    group_id = #{group_id}
+                                                                    group_id = #{groupId}
                                                             LIMIT 1))
         WHERE
-                group_id = #{group_id}
+                group_id = #{groupId}
     </select>
 
 </mapper>
