@@ -3,7 +3,7 @@ class CollectionReqParam {
     #page = 0;
 
     constructor() {
-        this.#page = 1
+        this.#page = 1;
     }
 
     static getInstance() {
@@ -68,11 +68,14 @@ class CollectionsService {
         return this.#instance;
     }
 
+    groupIdList = new Array();
+
     loadCollections() {
         const responseData = CollectionsApi.getInstance().getCollections(CollectionReqParam.getInstance().getObject());
 
         const collectionProducts = document.querySelector(".collection-products");
         responseData.forEach(collection => {
+            this.groupIdList.push(collection.groupId);
             collectionProducts.innerHTML += `
                 <li class="collection-product">
                     <div class="product-img">

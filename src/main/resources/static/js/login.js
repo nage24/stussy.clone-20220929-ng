@@ -1,7 +1,8 @@
 const registerButton = document.querySelectorAll(".login-button")[0];
 const loginButton = document.querySelectorAll(".login-button")[1];
 
-registerGoButton.onclick = () => {
+registerButton.onclick = () => {
+registerButton.onclick = () => {
     location.href = "/account/register";
 }
 

@@ -82,7 +82,7 @@ class ProductDetailService {
 
         simpleInfo.textContent = responseData.infoSimple;
         detailInfo.innerHTML = `<strong>PRODUCT DETAILS</strong>
-${responseData.infoDetail}`;
+        ${responseData.infoDetail}`;
         optionInfo.textContent = responseData.infoOption;
         managementInfo.textContent = responseData.infoManagement;
         shippingInfo.textContent = responseData.infoShipping;
