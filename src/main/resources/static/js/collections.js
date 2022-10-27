@@ -84,7 +84,7 @@ class CollectionsService {
             `;
         });
 
-        this.addProductClickEvent(responseData);
+        this.addProductClickEvent();
         this.addScrollEvent();
 
     }
@@ -112,7 +112,7 @@ class CollectionsService {
         const products = document.querySelectorAll(".collection-product");
         products.forEach/((product, index) => {
                 products.onclick = () => {
-                    location.href = "/products/${responseData[index].id}";
+                    location.href = "/products/${this.groupIdList[index]}";
                 }
         });
 
