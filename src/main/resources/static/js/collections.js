@@ -113,7 +113,7 @@ class CollectionsService {
 
     addProductClickEvent() {
         const products = document.querySelectorAll(".collection-product");
-        products.forEach/((product, index) => {
+        products.forEach((product, index) => {
                 products.onclick = () => {
                     location.href = "/products/${this.groupIdList[index]}";
                 }

@@ -31,11 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/admin/**")
 //                .access("hasRole('ADMIN') or hasRole('MANAGER')")
 
-                //.antMatchers("/admin/**", "/api/admin/**")
-                //.access("hasRole('ADMIN') or hasRole('MANAGER')")
-
-                .antMatchers("/account") //해당 요청 주소들은
-                .access("hasRole('USER') or hasRole('ADMIN') or hasRole('MANAGER')")
+                .antMatchers("/admin/**", "/api/admin/**")
+                .access("hasRole('ADMIN') or hasRole('MANAGER')")
 
                 .antMatchers("/", "/index", "/collections/**")
                 .permitAll()
@@ -60,8 +57,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/account/login") //우리가 만든 로그인 페이지를 사용해라. GET 요청
                 .loginProcessingUrl("/account/login")   // 로그인 로직(PrincipalDetailsService) POST 요청 ; 스프링 시큐리티 자동 매핑
                 .failureHandler(new AuthFailureHandler())
-                // .successForwardUrl() // login success 시 연결할 url
-                .defaultSuccessUrl("/index");
+                //.successForwardUrl("/collections/all") // login success 시 연결할 url
+                .defaultSuccessUrl("/collections/all");
 
     }
 

@@ -33,6 +33,7 @@ public class PrincipalDetailService implements UserDetailsService {
             throw new UsernameNotFoundException("존재하지 않는 아이디입니다.");
         }
 
+        log.info("로그인 성공?");
         return new PrincipalDetails(user);
     }
 }

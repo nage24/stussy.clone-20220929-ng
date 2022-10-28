@@ -1,7 +1,7 @@
 package com.stussy.stussy.clone20220929ng.dto.account;
 
 import com.stussy.stussy.clone20220929ng.domain.User;
-import com.stussy.stussy.clone20220929ng.validation.validation.ValidationGroups;
+import com.stussy.stussy.clone20220929ng.dto.validation.ValidationGroups;
 import lombok.Data;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -32,11 +32,12 @@ public class RegisterReqDto {
     @Email(message = "잘못된 이메일 형식입니다") // @Email 은 null 을 유효하다고 판단, NotBlank 달아줘야 함.
     private String email;
 
-    @NotBlank(message = "비밀번호는 비워 둘 수 없습니다"
-                ,groups = ValidationGroups.NotBlankGroup.class)
-    @Size(min = 8, max = 16, message = "비밀번호는 8자 이상 16자 이하로 작성해야 합니다")
-    @Pattern(regexp = "(?=.*[a-zA-Z]$])(?=.*\\d)(?=.*[!#@%^&*_])[a-zA-Z\\d-!@#$%^&*_]*$", message="숫자, 영문, 특수기호를 하나 이상 포함하여야 합니다"
-            , groups = ValidationGroups.PatternCheckGroup.class)
+    @NotBlank(message = "비밀번호는 비워 둘 수 없습니다", groups = ValidationGroups.NotBlankGroup.class)
+    @Size(min = 8, max = 16, message = "비밀번호는 8자에서 16자 사이여야합니다.", groups = ValidationGroups.SizeCheckGroup.class)
+    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[~!@#$%^&*_])[a-zA-Z\\d-~!@#$%^&*_]*$",
+            message = "비밀번호는 숫자, 영문, 특수기호를 하나 이상 포함하여 작성해야합니다",
+            groups = ValidationGroups.PatternCheckGroup.class
+    )
     private String password;
 
 

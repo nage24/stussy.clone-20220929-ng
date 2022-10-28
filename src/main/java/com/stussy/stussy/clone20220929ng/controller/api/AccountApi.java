@@ -4,7 +4,7 @@ import com.stussy.stussy.clone20220929ng.aop.annotation.LogAspect;
 import com.stussy.stussy.clone20220929ng.aop.annotation.ValidAspect;
 import com.stussy.stussy.clone20220929ng.dto.CMRespDto;
 import com.stussy.stussy.clone20220929ng.dto.account.RegisterReqDto;
-import com.stussy.stussy.clone20220929ng.validation.validation.ValidationSequence;
+import com.stussy.stussy.clone20220929ng.dto.validation.ValidationSequence;
 import com.stussy.stussy.clone20220929ng.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

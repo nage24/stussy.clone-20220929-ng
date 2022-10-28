@@ -1,7 +1,7 @@
 package com.stussy.stussy.clone20220929ng.dto.admin;
 
 import com.stussy.stussy.clone20220929ng.domain.Product;
-import com.stussy.stussy.clone20220929ng.validation.validation.ValidationGroups;
+import com.stussy.stussy.clone20220929ng.dto.validation.ValidationGroups;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 

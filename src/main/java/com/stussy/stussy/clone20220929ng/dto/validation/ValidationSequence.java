@@ -1,4 +1,4 @@
-package com.stussy.stussy.clone20220929ng.validation.validation;
+package com.stussy.stussy.clone20220929ng.dto.validation;
 
 import javax.validation.GroupSequence;
 import javax.validation.groups.Default;

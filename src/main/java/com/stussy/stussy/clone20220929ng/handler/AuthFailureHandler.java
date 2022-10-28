@@ -19,7 +19,7 @@ public class AuthFailureHandler implements AuthenticationFailureHandler {
         if(exception.getClass() == UsernameNotFoundException.class || exception.getClass() == BadCredentialsException.class) {
             response.sendRedirect("/account/login?error=auth");
         }else {
-            response.sendRedirect("/account/login?error");
+            response.sendRedirect("/account/login?error=else");
         }
         // ctrl alt b ?
 

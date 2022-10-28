@@ -18,7 +18,7 @@ import java.util.Map;
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
-    private final ProductRepository productRepository;
+
 
     @Override
     public boolean checkDuplicatedEmail(String email) {
