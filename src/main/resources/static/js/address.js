@@ -39,6 +39,9 @@ class AddressApi {
 
 }
 
+/* onload 는 한 번만 일어나야함. 
+스크립트는 하나라도 에러나면 안 먹힘.
 window.onload = () => {
     AddressApi.getInstance().addAddressButtonEvent();
 }
+*/

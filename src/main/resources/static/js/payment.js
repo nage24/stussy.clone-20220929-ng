@@ -65,7 +65,7 @@ class ImportApi {
                 imp_key: this.impInfo.restApiKey,
                 imp_secret: this.impInfo.restApiSecret
             }),
-            
+
 
 
         })
@@ -87,5 +87,10 @@ class Order {
 
 }
 
+
+window.onload = () => {
+    AddressApi.getInstance().addAddressButtonEvent();
+    
+}
 
 
