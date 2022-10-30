@@ -15,7 +15,7 @@ class ImportApi {
             pg: "kakaopay",
             pay_method: "card",
             merchant_uid: "product-" + new Date().getTime(),
-            name: "pingmyping",
+            name: "핑구 인형",
             amount: 1,
             buyer_email: "gildong@gmail.com",
             buyer_name: "전갱이",
@@ -25,7 +25,7 @@ class ImportApi {
     };
 
 
-    imgInfo =  { 
+    impInfo =  {
         impUid: null,
         restApiKey: null,
         restApiSecret: null
@@ -54,9 +54,11 @@ class ImportApi {
     requestPayDetails() {
     }
 
-    requestPay(resp) {
+    responsePay(resp) {
         if(resp.success) {
 
+            alert("결제 성공!");
+            p=
             $.ajax({
                 async: false,
                 type: "post",
@@ -78,7 +80,6 @@ class ImportApi {
                 }
             });
 
-            alert("결제 성공!");
 
         }else {
             alert("결제 실패!");
