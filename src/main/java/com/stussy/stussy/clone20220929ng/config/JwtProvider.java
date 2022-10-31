@@ -32,7 +32,7 @@ public class JwtProvider {
 
     public Claims parseJwtToken(String token) {
         validationAuthorizationHeader(token);
-        token = breaerRemove(token);
+        token = bearerRemove(token);
 
         return Jwts.parser()
                 .setSigningKey(Base64.getEncoder().encodeToString(secretKey.getBytes()))
@@ -47,7 +47,7 @@ public class JwtProvider {
 
     }
 
-    private String breaerRemove(String token) {
+    private String bearerRemove(String token) {
 
         return token.substring("Bearer ".length());
     }

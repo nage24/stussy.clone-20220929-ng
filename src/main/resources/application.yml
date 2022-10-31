@@ -31,6 +31,6 @@ mybatis:
 
 file:
   # 집
-  #path: C:/junil/ng/web/intellij/stussy-clone-20220929-ng/upload/
+  path: C:/junil/ng/web/intellij/stussy-clone-20220929-ng/upload/
   # 학원
-  path: C:/Program Files/junil/web/springboot/stussy-clone-20220929-ng/upload/
+  #path: C:/Program Files/junil/web/springboot/stussy-clone-20220929-ng/upload/
