@@ -1,18 +1,12 @@
 package com.stussy.stussy.clone20220929ng.controller.api;
 
-import com.stussy.stussy.clone20220929ng.config.JwtProvider;
+import com.stussy.stussy.clone20220929ng.util.JwtProvider;
 import com.stussy.stussy.clone20220929ng.dto.CMRespDto;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Header;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.Duration;
-import java.util.Date;
 
 @RequiredArgsConstructor
 @RestController

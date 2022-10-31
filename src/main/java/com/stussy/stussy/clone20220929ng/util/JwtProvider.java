@@ -1,4 +1,4 @@
-package com.stussy.stussy.clone20220929ng.config;
+package com.stussy.stussy.clone20220929ng.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
