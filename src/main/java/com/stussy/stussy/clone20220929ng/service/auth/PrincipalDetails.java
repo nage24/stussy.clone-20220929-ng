@@ -4,17 +4,25 @@ import com.stussy.stussy.clone20220929ng.domain.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 @Getter
-public class PrincipalDetails implements UserDetails { // ctrl I ; Override
+public class PrincipalDetails implements UserDetails, OAuth2User { // ctrl I ; Override
 
     private User user;
+    private Map<String, Object> attributes;
 
     public PrincipalDetails(User user) {
         this.user = user;
+    }
+
+    public PrincipalDetails(User user, Map<String, Object> attributes) {
+        this.user = user;
+        this.attributes = attributes;
     }
 
     @Override
@@ -54,5 +62,10 @@ public class PrincipalDetails implements UserDetails { // ctrl I ; Override
     @Override
     public boolean isEnabled() { // 계정의 활성화 여부(휴먼 계정, 이메일 또는 전화번호 인증 필요)
         return true;
+    }
+
+    @Override
+    public String getName() {
+        return (String) attributes.get("name");
     }
 }

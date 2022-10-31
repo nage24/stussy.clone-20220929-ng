@@ -11,10 +11,10 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();;
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.addAllowedOrigin("*");
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
+        config.setAllowCredentials(true); // 자격증명 허용 설정, Cors 를 풀겠다 . .
+        config.addAllowedOrigin("*"); // 모든 요청 주소에 대해 . . .
+        config.addAllowedHeader("*"); // 모든 헤더 내용 . .
+        config.addAllowedMethod("*"); // 모든  메소드 방식 . . .
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }

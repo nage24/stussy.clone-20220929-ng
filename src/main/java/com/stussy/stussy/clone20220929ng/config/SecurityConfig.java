@@ -1,6 +1,8 @@
 package com.stussy.stussy.clone20220929ng.config;
 
 import com.stussy.stussy.clone20220929ng.handler.AuthFailureHandler;
+import com.stussy.stussy.clone20220929ng.service.auth.PrincipalOauth2Service;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,7 +12,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @EnableWebSecurity // 기존의 WebSecurityConfigurerAdapter 클래스를 해당 SecurityConfig 로 대체하겠다 ...
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final PrincipalOauth2Service principalOauth2Service; // D I 해 준 것
 
     // IoC 등록 -> @ Component ... & @ Bean ...
     @Bean // -> Security 가 가지고 있는 BCryptPasswordEncoder 클래스를 가져다 씀. -> 기존 존재 객체 (@ Configuration 객체) 들은 @ Bean 을 달아주고,
@@ -44,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll() //모두 접근 권한을 허용해라.
 
                 /*<<<<<<<<<<<<<<<<<< API >>>>>>>>>>>>>>>>*/
-                .antMatchers("/api/account/register", "/api/collections/**")
+                .antMatchers("/api/account/register", "/api/collections/**", "/api/auth/**")
                 .permitAll()
 
                 .anyRequest() //antMatchers 외에 다른 모든 요청들은
@@ -57,6 +62,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/account/login") //우리가 만든 로그인 페이지를 사용해라. GET 요청
                 .loginProcessingUrl("/account/login")   // 로그인 로직(PrincipalDetailsService) POST 요청 ; 스프링 시큐리티 자동 매핑
                 .failureHandler(new AuthFailureHandler())
+                .and()
+                .oauth2Login()
+                .userInfoEndpoint()
+                .userService(principalOauth2Service)
+                .and()
                 //.successForwardUrl("/collections/all") // login success 시 연결할 url
                 .defaultSuccessUrl("/collections/all");
 

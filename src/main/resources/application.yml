@@ -15,6 +15,15 @@ spring:
     user:
       name: nk
       password: 1111
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 535038533293-5oatv4pq9f6csqs50ijc54l6ilorooku.apps.googleusercontent.com
+            clientSecret: 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
+            scope:
+              - email
+              - profile
 
 mybatis:
   mapper-locations:
@@ -22,6 +31,6 @@ mybatis:
 
 file:
   # 집
-  path: C:/junil/ng/web/intellij/stussy-clone-20220929-ng/upload/
+  #path: C:/junil/ng/web/intellij/stussy-clone-20220929-ng/upload/
   # 학원
-  #path: C:/Program Files/junil/web/springboot/stussy-clone-20220929-ng/upload/
+  path: C:/Program Files/junil/web/springboot/stussy-clone-20220929-ng/upload/
