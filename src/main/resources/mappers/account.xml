@@ -26,7 +26,11 @@
     </resultMap>
 
     <!-- insert 두번 하려면 yml 설정 : url 뒤로 ?allowMultiQueries=true 를 준다 ... -->
-    <insert id="save" parameterType="com.stussy.stussy.clone20220929ng.domain.User">
+    <insert id="save"
+            parameterType="com.stussy.stussy.clone20220929ng.domain.User"
+            useGeneratedKeys="true"
+            keyProperty="id"
+            >
         insert into
             user_mst
         values(
@@ -43,6 +47,18 @@
         )
     </insert>
 
+    <update id="updateUserOauth2" parameterType="com.stussy.stussy.clone20220929ng.domain.User">
+
+        update
+            user_mst
+        at
+            oauth_username = #{oauth_username},
+            provider = #{provider}
+            update_date = now()
+        where
+            id = #{id}
+
+    </update>
 
 
 

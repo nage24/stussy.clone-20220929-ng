@@ -78,9 +78,14 @@ public class PrincipalOauth2Service extends DefaultOAuth2UserService {
 
             accountRepository.save(user);
 
-            user = accountRepository.findUserByEmail(email);
-        }
+            // user = accountRepository.findUserByEmail(email);
+        } else if (user.getOauth_username() == null) {
 
+            user.setOauth_username(oauth2_id);
+            user.setProvider(provider);
+            accountRepository.updateUserOauth2(user);
+
+        }
 
 
         return user;

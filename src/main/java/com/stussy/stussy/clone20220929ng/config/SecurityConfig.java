@@ -8,7 +8,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @EnableWebSecurity // 기존의 WebSecurityConfigurerAdapter 클래스를 해당 SecurityConfig 로 대체하겠다 ...
 @Configuration
@@ -64,7 +71,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureHandler(new AuthFailureHandler())
                 .and()
                 .oauth2Login()
+                
+//                .successHandler(new AuthenticationSuccessHandler() { // 성공 시 처리
+//                    @Override
+//                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+//                        
+//                    }
+//                })
+                
                 .userInfoEndpoint()
+
+                /*
+                1. google , naver, kakao 로그인 요청 -> 코드를 발급(토큰)
+                2. 발급받은 코드로 액세스 토큰을 발급 요청 -> 발급
+                3. 발급하면 Access 토큰으로 scope 에 등록된 프로필 정보를 요청할 수 있게 됨.
+                4. 해당 정보를 response 또는 Attributes 로 전달 받음
+                 */
+
                 .userService(principalOauth2Service)
                 .and()
                 //.successForwardUrl("/collections/all") // login success 시 연결할 url

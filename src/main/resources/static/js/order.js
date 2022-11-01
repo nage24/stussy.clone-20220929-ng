@@ -58,7 +58,10 @@ class ImportApi {
         if(resp.success) {
 
             alert("결제 성공!");
-            p=
+
+
+
+
             $.ajax({
                 async: false,
                 type: "post",
